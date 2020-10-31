@@ -1,21 +1,52 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "./src/screens/HomeScreen.js";
+import HomeTabScreen from "./src/navigation/HomeTab.js";
+import SignUpScreen from "./src/screens/SignUpScreen.js";
+import LogInScreen from "./src/screens/LogInScreen.js";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+import {AuthContext, AuthProvider} from "./src/provider/AuthProvider";
+
+const AppDrawer = createDrawerNavigator();
+const AuthStack = createStackNavigator();
+
+const AppDrawerScreen =() =>{
+  return(
+    <AppDrawer.Navigator initialRouteName="Home">
+      <AppDrawer.Screen name= "Home" component={HomeTabScreen} />
+     
+    </AppDrawer.Navigator>
+  )
+}
+const AuthStackScreen =() =>{
+  return(
+    <AuthStack.Navigator initialRouteName ="LogIn">
+      <AuthStack.Screen name= "SignUp" 
+      component={SignUpScreen} 
+      options={{headerShown: false}} 
+      />
+      <AuthStack.Screen name= "LogIn" 
+      component={LogInScreen} 
+      options={{headerShown: false}}
+      />
+    </AuthStack.Navigator>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function App() {
+  return (
+    <AuthProvider>
+      <AuthContext.Consumer>
+        {(auth) => (
+          <NavigationContainer>
+            {auth.IsLoggedIn ? <AppDrawerScreen /> : <AuthStackScreen />}
+          </NavigationContainer>
+        )}
+      </AuthContext.Consumer>
+    </AuthProvider>
+  );
+}
+export default App;
