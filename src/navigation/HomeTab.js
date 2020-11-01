@@ -3,13 +3,16 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "./../screens/NotificationScreen";
+import { StyleSheet } from "react-native";
+
 
 const HomeTab = createMaterialBottomTabNavigator();
 
 const HomeTabScreen = () => {
   return (
-    <HomeTab.Navigator initialRouteName="Home">
-      <HomeTab.Screen
+    <HomeTab.Navigator initialRouteName="Home" activeColor="white"
+    barStyle={{ backgroundColor: '#873FB2' }}>
+      <HomeTab.Screen 
         name="Home"
         component={HomeScreen}
         options={{
@@ -20,6 +23,7 @@ const HomeTabScreen = () => {
             ) : (
               <AntDesign name="home" color="white" size={22} />
             ),
+          
         }}
       />
       <HomeTab.Screen

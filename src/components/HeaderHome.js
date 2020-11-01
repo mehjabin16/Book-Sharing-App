@@ -5,13 +5,13 @@ const HeaderHome = (props) => {
   return (
     <AuthContext.Consumer>
       {(auth) => (
-        <Header
+        <Header backgroundColor='#873FB2'
           leftComponent={{
             icon: "menu",
             color: "#fff",
             onPress: props.DrawerFunction,
           }}
-          centerComponent={{ text: "The Office", style: { color: "#fff" } }}
+          centerComponent={{ text: "Chicago Typewriter", style: { color: "#fff" } }}
           rightComponent={{
             icon: "lock-outline",
             color: "#fff",

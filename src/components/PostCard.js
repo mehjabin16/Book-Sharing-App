@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -13,9 +13,9 @@ const PostCard = (props) => {
         }}
       >
         <Avatar
-          containerStyle={{ backgroundColor: "#ffab91" }}
+          containerStyle={{ backgroundColor: "#F7E5FF" }}
           rounded
-          icon={{ name: "user", type: "font-awesome", color: "black" }}
+          icon={{ name: "user", type: "font-awesome", color: "black" }} 
           activeOpacity={1}
         />
         <Text h4Style={{ padding: 10 }} h4>
@@ -35,12 +35,35 @@ const PostCard = (props) => {
         <Button
           type="outline"
           title="  Like (17)"
-          icon={<AntDesign name="like2" size={24} color="dodgerblue" />}
+          titleStyle ={styles.button2Style}
+          icon={<AntDesign name="like2" size={24} color="#873FB2" />}
         />
-        <Button type="solid" title="Comment (10)" />
+        <Button type="solid" 
+           buttonStyle ={styles.buttonStyle}
+           title="Comment (10)" 
+            onPress={
+             function(){
+               
+              } }/>
       </View>
     </Card>
   );
 };
+const styles = StyleSheet.create({
+  buttonStyle:{
+      backgroundColor: "#873FB2"
+      
+  },
+  button2Style:{
+      color: "#873FB2"
+      
+  },
+  iconStyle:{
+    backgroundColor: "#FFB7B2"
+    
+},
+
+
+});
 
 export default PostCard;

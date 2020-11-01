@@ -16,7 +16,7 @@ const NotificationScreen = (props) => {
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Avatar
-                containerStyle={{ backgroundColor: "cyan" }}
+                containerStyle={{ backgroundColor: "#F6EBF9" }}
                 rounded
                 icon={{
                   name: "thumbs-o-up",

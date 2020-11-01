@@ -6,6 +6,7 @@ import HomeScreen from "./src/screens/HomeScreen.js";
 import HomeTabScreen from "./src/navigation/HomeTab.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
+import ProfileScreen from "./src/screens/ProfileScreen.js";
 
 
 import {AuthContext, AuthProvider} from "./src/provider/AuthProvider";
@@ -15,8 +16,9 @@ const AuthStack = createStackNavigator();
 
 const AppDrawerScreen =() =>{
   return(
-    <AppDrawer.Navigator initialRouteName="Home">
+    <AppDrawer.Navigator initialRouteName="Home" >
       <AppDrawer.Screen name= "Home" component={HomeTabScreen} />
+      <AppDrawer.Screen name= "Profile" component={ProfileScreen} />
      
     </AppDrawer.Navigator>
   )
