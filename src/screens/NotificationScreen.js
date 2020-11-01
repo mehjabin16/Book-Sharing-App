@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import { AuthContext } from "../provider/AuthProvider";
@@ -13,6 +13,12 @@ const NotificationScreen = (props) => {
               props.navigation.toggleDrawer();
             }}
           />
+          <View>
+            <Button
+            title="See Post"
+             >
+            </Button>
+          </View>
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Avatar

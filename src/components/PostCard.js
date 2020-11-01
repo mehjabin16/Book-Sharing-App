@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 
-const PostCard = (props) => {
+const PostCard = (props, onPress) => {
   return (
     <Card>
       <View
@@ -22,7 +22,9 @@ const PostCard = (props) => {
           {props.author}
         </Text>
       </View>
-      <Text style={{ fontStyle: "italic" }}> {props.title}</Text>
+      <Text style={{ fontStyle: "italic" }}> 
+      {props.date}
+      </Text>
       <Text
         style={{
           paddingVertical: 10,
@@ -41,10 +43,7 @@ const PostCard = (props) => {
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
            title="Comment (10)" 
-            onPress={
-             function(){
-               
-              } }/>
+            />
       </View>
     </Card>
   );
