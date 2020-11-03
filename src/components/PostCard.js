@@ -3,12 +3,9 @@ import { View, StyleSheet } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 
-const PostCard = (props, onPress) => {
-<<<<<<< HEAD
+const PostCard = (props) => {
   const [LikeCount, setLikeCount] = useState(0);
 
-=======
->>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
   return (
     <Card>
       <View
@@ -28,11 +25,7 @@ const PostCard = (props, onPress) => {
         </Text>
       </View>
       <Text style={{ fontStyle: "italic" }}> 
-<<<<<<< HEAD
        posted on {props.date}
-=======
-      {props.date}
->>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
       </Text>
       <Text
         style={{
