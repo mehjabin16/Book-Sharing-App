@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, StyleSheet } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 
-const PostCard = (props) => {
+const PostCard = (props, onPress) => {
+  const [LikeCount, setLikeCount] = useState(0);
+
   return (
     <Card>
       <View
@@ -22,7 +24,9 @@ const PostCard = (props) => {
           {props.author}
         </Text>
       </View>
-      <Text style={{ fontStyle: "italic" }}> {props.title}</Text>
+      <Text style={{ fontStyle: "italic" }}> 
+       posted on {props.date}
+      </Text>
       <Text
         style={{
           paddingVertical: 10,
@@ -34,17 +38,20 @@ const PostCard = (props) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
           type="outline"
-          title="  Like (17)"
-          titleStyle ={styles.button2Style}
+          title= { LikeCount}
+          titleStyle = {styles.button2Style}
           icon={<AntDesign name="like2" size={24} color="#873FB2" />}
+          onPress={
+            function(){
+                 setLikeCount(LikeCount+1);
+                 console.log(LikeCount);
+            }
+          }
         />
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
            title="Comment (10)" 
-            onPress={
-             function(){
-               
-              } }/>
+            />
       </View>
     </Card>
   );

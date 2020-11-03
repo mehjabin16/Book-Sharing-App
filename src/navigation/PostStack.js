@@ -3,23 +3,24 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import PostScreen from "../screens/PostScreen";
+import HomeTabScreen from "./HomeTab"
 
-const CommentStack = createStackNavigator();
+const PostStack = createStackNavigator();
 
 
-const CommentStackScreen =() =>{
+const PostStackScreen =() =>{
   return(
-    <CommentStack.Navigator initialRouteName ="Home">
-      <CommentStack.Screen name= "Home" 
-      component={HomeScreen} 
+    <PostStack.Navigator initialRouteName ="Notification">
+      <PostStack.Screen name= "Notification" 
+      component={NotificationScreen} 
       options={{headerShown: false}} 
       />
-      <CommentStack.Screen name= "Post" 
+      <PostStack.Screen name= "Post" 
       component={PostScreen} 
       options={{headerShown: false}}
       />
-    </CommentStack.Navigator>
+    </PostStack.Navigator>
   )
 }
 
-export default CommentStackScreen;
+export default PostStackScreen;

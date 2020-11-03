@@ -6,10 +6,11 @@ import { storeDataJSON } from "../functions/AsyncFunctions";
 
 const SignUpScreen = (props) => {
     const [Name, setName] =useState("");
-    const [SID, setSID] = useState("");
+    const [ContactNo, setContactNo] = useState("");
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
-
+    const [Guid, setGuid] = useState("");
+    
 
 return(
     <View style={styles.viewStyle}>
@@ -30,15 +31,15 @@ return(
             />
 
             <Input leftIcon={<AntDesign name="idcard" size={24} color="black" />}
-            placeholder='Student ID'
+            placeholder='Contact No'
             onChangeText ={function(currentInput){
-                setSID(currentInput);
+                setContactNo(currentInput);
             }}
             />
 
             <Input leftIcon={<FontAwesome name="envelope" size={24} color="black" />}
             placeholder='E-mail Address'
-            onChangeText ={function(currentInput){
+            onChangeText ={ function(currentInput){
                 setEmail(currentInput);
             }}
             />
@@ -56,13 +57,17 @@ return(
              title=' Sign Up!'
              buttonStyle ={styles.buttonStyle}
              type='solid'
-             onPress={
+             onPress={               
                  function(){
+                     var RandomNumber = Math.floor(Math.random() * 100) + 1;
+                     const id = RandomNumber.toString();
+                     console.log(id);
                      let currentUser ={
                          name:Name,
-                         sid:SID,
+                         contact:ContactNo,
                          email:Email,
                          password:Password,
+                         guid: id,
                      };
                  storeDataJSON(Email, currentUser);
                  props.navigation.navigate("LogIn");
@@ -70,16 +75,21 @@ return(
                  }}
             />
 
-            <Button icon={<AntDesign name="user" size={24} color="#5B2C92" />}
-             title=" Already have an account?"
-             titleStyle ={styles.button2Style}
+        <View style={{ flexDirection: "row", justifyContent:"center", marginLeft:10, marginTop:20}}>
+            
+            <Text style={styles.txtStyle}>
+            Already have an account?
+            </Text>
+           <Button 
+             title="Sign In"
              type='clear'
+             titleStyle={styles.button2Style}
              onPress={function(){
-              props.navigation.navigate("LogIn");
-             }   
-            }/>
-
-        </Card>
+                props.navigation.navigate("LogIn");
+               } }  
+            /> 
+           </View>
+           </Card>
     </View>
 );
 
@@ -92,8 +102,8 @@ const styles = StyleSheet.create({
         backgroundColor:'white'
       },
       imgStyle: {
-          width: 550,
-          height: 300,
+          width: 500,
+          height: 250,
           alignSelf:"center"
   
       },
@@ -102,15 +112,25 @@ const styles = StyleSheet.create({
           
       },
       button2Style:{
-          color: "#5B2C92"
-          
-      },
+        color: "#4169E1",
+        fontSize:14,
+        fontWeight:"100",
+     
+        
+    },
       titleStyle:{
           fontSize: 30,
           alignSelf:"center",
           fontWeight: "bold",
           color:"#5B2C92"
-      }
+      },
+      txtStyle:{
+        marginLeft:0,
+        marginHorizontal:20,
+        alignSelf:"center",
+        color: "#5B2C92",
+        
+    }
 });
 
 export default SignUpScreen;

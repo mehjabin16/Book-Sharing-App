@@ -1,7 +1,8 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
+import PostScreen from "./../screens/PostScreen";
 import { AuthContext } from "../provider/AuthProvider";
 const NotificationScreen = (props) => {
   return (
@@ -13,6 +14,9 @@ const NotificationScreen = (props) => {
               props.navigation.toggleDrawer();
             }}
           />
+          <View>
+           
+          </View>
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Avatar
@@ -24,6 +28,11 @@ const NotificationScreen = (props) => {
                   color: "black",
                 }}
                 activeOpacity={1}
+                onPress ={
+                  function(){
+                    props.navigation.navigate("Post");
+                  }
+                }
               />
               <Text style={{ paddingHorizontal: 10 }}>
                 Pam Beesley Liked Your Post.

@@ -4,7 +4,7 @@ import {Input, Button, Card} from "react-native-elements";
 import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
 import {AuthContext} from "../provider/AuthProvider";
 import {getDataJSON} from "../functions/AsyncFunctions";
-import { color } from "react-native-reanimated";
+
 
 const LogInScreen = (props) => {
     const [Email, setEmail] = useState("");
@@ -19,9 +19,10 @@ return(
          style={styles.imgStyle}>
         </Image>
         <Text style={styles.titleStyle}>
-            Welcome Back
+            Welcome Back!
         </Text>
         <Card>
+        
             <Card.Divider/>
             <Input leftIcon={<FontAwesome name="envelope" size={24} color="black" />}
             placeholder='E-mail Address'
@@ -39,14 +40,16 @@ return(
             />
 
             <Button icon={<AntDesign name="login" size={24} color="white" />}
-             title=" SignIn"
+             title=" Sign In"
              type="solid"
              buttonStyle ={styles.buttonStyle}
              onPress={async function() {
                    let UserData =await getDataJSON(Email);
                    if(UserData.password == Password)
                    {     
-                   auth.setIsLoggedIn(true);       
+                   auth.setIsLoggedIn(true);   
+                   auth.setCurrentUser(UserData); 
+                   console.log(UserData);  
                    }
                    else{
                        alert('Login Failed');
@@ -54,19 +57,22 @@ return(
                    }
                 }}
             />
-
-            <Button icon={<AntDesign name="user" size={24} color="#5B2C92" />}
-             title=" Don't have an account?"
+           <View style={{ flexDirection: "row", justifyContent:"center", marginLeft:10, marginTop:20}}>
+            
+            <Text style={styles.txtStyle}>
+            Don't have an account?
+            </Text>
+           <Button 
+             title="Sign Up"
              type='clear'
              titleStyle={styles.button2Style}
              onPress={function(){
               props.navigation.navigate("SignUp");
              }   
-            }
-           
-            />
-
-        </Card>
+            }         
+            /> 
+           </View>
+           </Card>
     </View>)}
     </AuthContext.Consumer>
 );
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
       backgroundColor:'white'
     },
     imgStyle: {
-        width: 550,
+        width: 400,
         height: 300,
         alignSelf:"center"
 
@@ -90,7 +96,9 @@ const styles = StyleSheet.create({
         
     },
     button2Style:{
-        color: "#5B2C92"
+        color: "#4169E1",
+        fontSize:14,
+        fontWeight:"100",     
         
     },
     titleStyle:{
@@ -99,6 +107,12 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         fontWeight: "bold",
         color: "#5B2C92"
+    },
+    txtStyle:{
+        marginLeft:0,
+        marginHorizontal:20,
+        alignSelf:"center",
+        color: "#5B2C92",      
     }
 
 

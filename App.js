@@ -2,7 +2,8 @@ import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./src/screens/HomeScreen.js";
+import PostScreen from "./src/screens/PostScreen.js";
+import NotificationScreen from "./src/screens/NotificationScreen.js";
 import HomeTabScreen from "./src/navigation/HomeTab.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
@@ -13,6 +14,7 @@ import {AuthContext, AuthProvider} from "./src/provider/AuthProvider";
 
 const AppDrawer = createDrawerNavigator();
 const AuthStack = createStackNavigator();
+
 
 const AppDrawerScreen =() =>{
   return(
@@ -37,6 +39,7 @@ const AuthStackScreen =() =>{
     </AuthStack.Navigator>
   )
 }
+
 
 function App() {
   return (

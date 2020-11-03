@@ -3,18 +3,21 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "./../screens/NotificationScreen";
+import PostStackScreen from "./PostStack";
+import CommentStackScreen from "./CommentStack";
 import { StyleSheet } from "react-native";
 
 
 const HomeTab = createMaterialBottomTabNavigator();
 
+
 const HomeTabScreen = () => {
   return (
-    <HomeTab.Navigator initialRouteName="Home" activeColor="white"
+    <HomeTab.Navigator initialRouteName="HomeStack" activeColor="white"
     barStyle={{ backgroundColor: '#873FB2' }}>
       <HomeTab.Screen 
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={CommentStackScreen}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) =>
@@ -28,9 +31,9 @@ const HomeTabScreen = () => {
       />
       <HomeTab.Screen
         name="Notification"
-        component={NotificationScreen}
+        component={PostStackScreen}
         options={{
-          tabBarLabel: "Notifications",
+           tabBarLabel: "Notifications",
           tabBarIcon: ({ focused }) =>
             focused ? (
               <Ionicons name="ios-notifications" size={26} color="white" />
