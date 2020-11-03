@@ -1,10 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, StyleSheet, Button } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import PostScreen from "./../screens/PostScreen";
 import { AuthContext } from "../provider/AuthProvider";
+import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+
 const NotificationScreen = (props) => {
+  const [LikeList, setLikeList] = useState([]);
+  const [CommentList, setCommentList] = useState([]);
+ 
+
   return (
     <AuthContext.Consumer>
       {(auth) => (

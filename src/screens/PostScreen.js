@@ -1,10 +1,29 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, {useState, useEffect} from "react";
+import { View, StyleSheet, FlatList } from "react-native";
 import { Text, Card, Avatar, Button, Input } from "react-native-elements";
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 import HeaderHome from "./../components/HeaderHome";
+import CommentCard from "./../components/CommentCard"
 import { AuthContext } from "../provider/AuthProvider";
+import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+
 const PostScreen = (props) => {
+  const [CurDate, setCurDate] = useState("");
+  const [Commentbody, setCommentbody] = useState("");
+  const [CommentList, setCommentList] = useState([]);
+ 
+  useEffect(() =>{
+   var date= new Date().getDate();
+   var month= new Date().getMonth()+1;
+   var year= new Date().getFullYear();
+   setCurDate(date+'/'+month+'/'+year);
+   const getData = async()=>
+   {
+     setCommentList(await getDataJSON('comments'));
+   }
+   getData();
+  },[]);
+
   return (
     <AuthContext.Consumer>
       {(auth) => (
@@ -60,23 +79,51 @@ const PostScreen = (props) => {
         placeholder="Write Something"
         leftIcon={<Entypo name="pencil" size={24} color="black" />}
         onChangeText ={function(val){
-          setPostbody(val);
+          setCommentbody(val);
       }}
       />
       <Button title="Comment" titleStyle={styles.button2Style}
-       type="outline" >
-
+       type="outline"
+       onPress={
+        async function(){
+          if(CommentList !=null){
+            setCommentList(comments => [
+              ...comments,
+              {
+                name: auth.CurrentUser.name,
+                date: CurDate,
+                commentbody: Commentbody,
+                key : Commentbody,
+              },
+            ]);
+          }
+          else{
+            const array = [];
+            array.push({
+                name: auth.CurrentUser.name,
+                date: CurDate,
+                commentbody: Commentbody,
+                key : Commentbody,
+            });
+            setCommentList(array)
+          }
+          await storeDataJSON('comments', CommentList);
+       } } >
        </Button>
        </Card>
-       <Card>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>        
-            <Text style={{ paddingHorizontal: 10 }}>
-                
-            </Text>
-          </View>
-          </Card>
+       <FlatList
+      data ={CommentList}
+      renderItem ={ postitem =>{
+        return(
+          <CommentCard
+          author={postitem.item.name}
+          date= {postitem.item.date}
+          body= {postitem.item.commentbody}    
+          />
+         )}}
+       /> 
           
-     </View>
+       </View>
       )}
     </AuthContext.Consumer>
   );

@@ -6,7 +6,7 @@ import {AuthContext} from "../provider/AuthProvider";
 import PostCard from "./../components/PostCard";
 import HeaderHome from "../components/HeaderHome";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
-import { } from "../functions/AsyncFunctions";
+
 
 
 const HomeScreen = (props) => {
