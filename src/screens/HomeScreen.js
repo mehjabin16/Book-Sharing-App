@@ -6,7 +6,11 @@ import {AuthContext} from "../provider/AuthProvider";
 import PostCard from "./../components/PostCard";
 import HeaderHome from "../components/HeaderHome";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+<<<<<<< HEAD
 
+=======
+import { } from "../functions/AsyncFunctions";
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
 
 
 const HomeScreen = (props) => {
@@ -42,6 +46,10 @@ return(
         leftIcon={<Entypo name="pencil" size={24} color="black" />}
         onChangeText ={function(val){
           setPostbody(val);
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
       }}
      
       />
@@ -72,16 +80,25 @@ return(
               await storeDataJSON('posts', Postcards);
            } }
          />
+<<<<<<< HEAD
          
+=======
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
     </Card>  
     <FlatList
       data ={Postcards}
       renderItem ={ postitem =>{
         return(
           <PostCard
+<<<<<<< HEAD
           author={postitem.item.name}
           date= {postitem.item.date}
           body= {postitem.item.postbody}
+=======
+            author={postitem.item.name}
+            date= {postitem.item.date}
+            body= {postitem.item.postbody}
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
            
           />
       )}}

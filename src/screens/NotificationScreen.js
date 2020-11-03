@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, {useState} from "react";
+=======
+import React from "react";
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
 import { View, StyleSheet, Button } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
@@ -21,7 +25,14 @@ const NotificationScreen = (props) => {
             }}
           />
           <View>
+<<<<<<< HEAD
            
+=======
+            <Button
+            title="See Post"
+             >
+            </Button>
+>>>>>>> 3537d3f4bded045a420e285e0b1c92dafd8fa3e7
           </View>
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Text, Card, Avatar, Button, Input } from "react-native-elements";
-import { FontAwesome, Entypo } from '@expo/vector-icons';
+import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
 import HeaderHome from "./../components/HeaderHome";
 import CommentCard from "./../components/CommentCard"
 import { AuthContext } from "../provider/AuthProvider";
@@ -32,14 +32,19 @@ const PostScreen = (props) => {
             DrawerFunction={() => {
               props.navigation.toggleDrawer();
             }}
-          /><Button
-          title="Go Back" onPress={
+          />
+          <Button
+          type="outline"
+          title="Go Back"
+          titleStyle={styles.buttonStyle}
+          buttonStyle={{alignSelf:"flex-start", marginLeft:16, paddingRight:280}}
+          icon={<AntDesign name="back" size={28} color="black"/>}
+          onPress={
             function(){
               props.navigation.navigate("Notification");
-            }
-          }
-           >
-          </Button>
+            }} 
+          />
+          
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Avatar
@@ -65,14 +70,14 @@ const PostScreen = (props) => {
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               
               <Text style={{ paddingHorizontal: 10 }}>
-               Like:          Comment:
+               Like:                 
               </Text>
-            </View>
-            
-          </Card>
-      
-          </Card>
-          
+              <Text style={{ paddingHorizontal: 10 }}>
+               Comment:                 
+              </Text>
+            </View>            
+          </Card>     
+          </Card>     
           <Card>
       <Input 
         multiline
@@ -135,8 +140,22 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   viewStyle: {
+    backgroundColor:"white",
     flex: 1,
   },
+  buttonStyle:{
+    color: "#4169E1",
+    fontSize:14,
+    fontWeight:"100",
+    marginLeft:10,
+
+},
+button2Style:{
+  color: "#4169E1",
+  fontSize:16,
+  fontWeight:"100",
+}
+
 });
 
 export default PostScreen;
