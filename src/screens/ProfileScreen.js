@@ -2,19 +2,20 @@ import React, {useState, useEffect} from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { Text, Card, Icon, Button, Input } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
+import ImageUpload from '../components/ImageLoader';
 import { AuthContext } from "../provider/AuthProvider";
 import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
 import {storeDataJSON, getDataJSON, removeData} from "../functions/AsyncFunctions";
+
 
 
 const ProfileScreen = (props) => {
   const [Bithdate, setBirthdate] = useState("");
   const [Address, setAdress] = useState("");
   const [Work, setWork] = useState("");
-  //const [UserProfile, setUserProfile] = useState([]);
+  const [UserProfile, setUserProfile] = useState([]);
 
- 
-
+  
   return (
     <AuthContext.Consumer>
       {(auth) => (
@@ -27,9 +28,9 @@ const ProfileScreen = (props) => {
           />
           <View style={{alignSelf:"center" , marginTop:30}}>
          <View>
-         <Image source={require('./../../assets/avatar.png')}
-         style={styles.imgStyle}>
-        </Image>
+         <View style={{ justifyContent: "center", alignSelf: "center", marginVertical: 40 }}>
+              <ImageUpload props={props} />
+        </View>
         </View>
         <View style={styles.addStyle}>
         <Icon
@@ -77,27 +78,12 @@ const ProfileScreen = (props) => {
                 setWork(currentInput);
             }}
             />
-            <Button type="outline" title="Confirm?"
-            onPress={
-              async function(){
-                const Username = auth.CurrentUser.name
-                let User ={
-                  name:Username,
-                  birthdate:Bithdate,
-                  address:Address,
-                  work:Work,
-              };
-              storeDataJSON('userprofile', User);
-              //console.log(User);
-              auth.setUserProfile(await getDataJSON('userprofile'));
-               //console.log(UserProfile);
-              }
-            }
-            />
+            
+           
             <View style={{marginTop:10}} >
-             <Text style={styles.txt2style}>Born On  :        {auth.UserProfile.birthdate}</Text>
-              <Text style={styles.txt2style}>Address :        {auth.UserProfile.address}</Text>
-              <Text style={styles.txt2style}>Works At:        {auth.UserProfile.work} </Text>
+             <Text style={styles.txt2style}>Born On  :      {Bithdate}  </Text>
+              <Text style={styles.txt2style}>Address :       {Address} </Text>
+              <Text style={styles.txt2style}>Works At:       {Work} </Text>
             </View>
           </Card>
           </ScrollView>

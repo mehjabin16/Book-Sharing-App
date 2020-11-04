@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { Text, Card, Avatar, Button, Input } from "react-native-elements";
-import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
+import { Text, Card, Avatar, Button, Input, Icon } from "react-native-elements";
+import { FontAwesome, Entypo, MaterialIcons} from '@expo/vector-icons';
 import HeaderHome from "./../components/HeaderHome";
 import CommentCard from "./../components/CommentCard"
 import { AuthContext } from "../provider/AuthProvider";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+
 
 const PostScreen = (props) => {
   //console.log(props);
@@ -55,11 +56,12 @@ const PostScreen = (props) => {
             }}
           />
           <Button
-          type="outline"
+          type="solid"
           title="Go Back"
           titleStyle={styles.buttonStyle}
-          buttonStyle={{alignSelf:"flex-start", marginLeft:5,paddingRight:300}}
-          icon={<AntDesign name="back" size={28} color="black"/>}
+          buttonStyle={{alignSelf:"flex-start", marginLeft:0,paddingRight:330, backgroundColor:"black"}}
+          icon={<MaterialIcons name="arrow-back" size={28} color="white" />}
+          iconContainerStyle ={{alignSelf:"auto"}}
           onPress={
             function(){
               props.navigation.navigate("HomeTab");
@@ -71,7 +73,7 @@ const PostScreen = (props) => {
             <Avatar
              containerStyle={{ backgroundColor: "#F7E5FF" }}
              rounded
-             icon={{ name: "user", type: "font-awesome", color: "black" }} 
+             icon={{ name: "user", type: "font-awesome", color: "black"}} 
              activeOpacity={1}
              />
               <Text h4Style={{ padding: 10 }} h4>{post.name}</Text>
@@ -82,11 +84,11 @@ const PostScreen = (props) => {
           <Card.Divider />
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              
-              <Text style={{ paddingHorizontal: 10 }}>
+           
+              <Text style={{ paddingHorizontal: 10 , fontWeight:"bold" }}>
                Like:  {likecount}               
               </Text>
-              <Text style={{ paddingHorizontal: 10 }}>
+              <Text style={{ paddingHorizontal: 80, fontWeight:"bold" }}>
                Comments: {CommentCount}                
               </Text>
             </View>            
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonStyle:{
-    color: "#4169E1",
+    color: "white",
     fontSize:14,
     fontWeight:"100",
     marginLeft:10,
