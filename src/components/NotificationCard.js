@@ -4,60 +4,53 @@ import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import { AuthContext } from "../provider/AuthProvider";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+import { useNavigation } from '@react-navigation/native';
 
 const NotificationCard = (props) => {
- const notification=props.notificatiions
+ const notifications=props.notificatiions 
  const currentUser=props.currentUser
-  
-  const [statement ,setStatement]=useState("liked your post")
+  const [statement ,setStatement]=useState("")
   const [check,setCheck]=useState(false)
+  const navigation = useNavigation();
   //console.log(notification.status)
-  const checkNotificationStatus=()=>{
-    if(notification.status==="comment"){
+  /*const checkNotificationStatus=()=>{
+    if(notification.status=="comment"){
 
     setStatement("commented on your post")
-    }
-    
+    }   
     setCheck(true)
 
 }
 
-
 if(!check)
-checkNotificationStatus()
+checkNotificationStatus()*/
 
   return (
     <AuthContext.Consumer>
       {(auth) => (
         <View style={styles.viewStyle}>
-          <HeaderHome
-            DrawerFunction={() => {
-              props.navigation.toggleDrawer();
-            }}
-          />
-          <View>
-           
-          </View>
+         
           <Card>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" ,padding:6}}>
               <Avatar
                 containerStyle={{ backgroundColor: "#F6EBF9" }}
-                rounded
+                
                 icon={{
-                  name: "thumbs-o-up",
+                  name: "commenting",
                   type: "font-awesome",
                   color: "black",
+                  size:20
                 }}
                 activeOpacity={1}
                 onPress ={
                   function(){
-                    //props.navigation.navigate("Post");
+                    ()=>navigation.navigate('Post' ,{currentUser} );
                   }
                 }
               />
-               <Text >{notification.name} </Text>
-                <Text></Text>
-                <Text >{statement} </Text>
+               <Text >  {props.commenter} </Text>
+                
+                <Text >commented on your post</Text>
             </View>
           </Card>
         </View>

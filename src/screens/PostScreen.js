@@ -16,9 +16,8 @@ const PostScreen = (props) => {
   const [CurDate, setCurDate] = useState("");
   const [NewComment, setNewComment] = useState("");
   const [CommentList, setCommentList] = useState([]);
-  const [CommenterInfo, setCommenterInfo] = useState([]);
   const [CommentCount, setCommentCount] = useState(0);
-  const [PostCommentInfo, setPostCommentInfo] = useState([]);
+  const [PostReactions, setPostReactions] = useState([]);
 
  
   useEffect(() =>{
@@ -36,9 +35,9 @@ const PostScreen = (props) => {
       setCommentCount(len)
       console.log(CommentCount)  
     }
-    let commenters = await getDataJSON(post.key+'Commenter')
+    let commenters = await getDataJSON(post.name+'Reaction')
     if(commenters!=null ){
-      setCommenterInfo(commenters)  
+      setPostReactions(commenters)  
     }
     //let postReaction = await getDataJSON(post.name+"Reaction")
       //setPostCommentInfo(postReaction)
@@ -120,20 +119,20 @@ const PostScreen = (props) => {
                   let commentList = CommentList.copyWithin()
                   commentList.push(commentInfo) 
                   setCommentList(commentList)
-              storeDataJSON(post.key+'Comment', CommentList);
-              console.log(CommentList);
+                  storeDataJSON(post.key+'Comment', CommentList);
+                  console.log(CommentList);
 
               let commenterinfo ={
                  commenter: currUser.name ,
-                 cid: CommentList.key,
                  pid: post.key,
-                 postauthor: post.name,   
+                 postauthor: post.name,  
+                 status:"comment" ,
               }
-              let allcommenter = CommenterInfo.copyWithin()
-              allcommenter.push(commenterinfo) 
-              setCommenterInfo(allcommenter)
-              storeDataJSON(post.key+'Commenter', CommenterInfo);
-              console.log(CommenterInfo);
+              let commenter = PostReactions.copyWithin()
+              commenter.push(commenterinfo) 
+              setPostReactions(commenter)
+              storeDataJSON(post.name+'Reaction', PostReactions);
+              console.log(PostReactions);
 
             
        } } >

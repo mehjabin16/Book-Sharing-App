@@ -11,7 +11,7 @@ const PostCard = (props) => {
   const currentUser=props.currentUser
   const [Icon, setIcon]=useState("like2");
   const [LikeCount, setLikeCount] = useState(0);
-  const [PostLikeInfo, setPostLikeInfo] = useState([]);
+  const [PostReactions, setPostReactions] = useState([]);
   const [Liked, setLiked] = useState([]);
   const [CommentCount, setCommentCount] = useState(0);
  
@@ -23,12 +23,14 @@ const PostCard = (props) => {
     { 
       //let postReaction = await getDataJSON(posts.name+"Reaction")
       //setPostLikeInfo(postReaction)
-      let likes =[]
+    let postReaction = await getDataJSON(posts.Email+"Reaction")
+    let likes =[]
     likes = await getDataJSON(posts.key+'Like');
     let len = likes.length
     if(likes != null ){
       setLiked(likes)
       setLikeCount(len+1)
+     // setPostReactions(postReaction)
       console.log(LikeCount)  
     }
              
@@ -79,8 +81,10 @@ const PostCard = (props) => {
                  let userlist = Liked.copyWithin()
                  userlist.push(likedusers ) 
                  setLiked(userlist)
-             storeDataJSON(posts.key+'Like', Liked);
-             console.log(Liked);
+                 storeDataJSON(posts.key+'Like', Liked);
+                 console.log(Liked);
+
+                 
                  
             }
           }

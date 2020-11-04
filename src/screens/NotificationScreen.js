@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, StyleSheet, Button, FlatList } from "react-native";
+import { View, StyleSheet, Button,FlatList } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import NotificationCard from "./../components/NotificationCard";
@@ -16,9 +16,10 @@ const NotificationScreen = (props) => {
    
     const getData = async()=>
     {
-      let reactionList=await getDataJSON(props.currentUser.name+"Reaction")
+      let reactionList = await getDataJSON(props.currentUser.name+'Reaction')
         if(reactionList !=null){
         setPostReactions(reactionList)
+        console.log(reactionList)
         
         }
       
@@ -39,11 +40,13 @@ const NotificationScreen = (props) => {
     <FlatList
 
       data ={PostReactions}
-      renderItem ={ function({item}){
+      renderItem ={ function({item})
+      {
         return(
           <NotificationCard
           currentUser = {auth.CurrentUser}
-          notifications ={item}  
+          notifications={item}
+          commenter ={item.commenter}
           />
       )}}
       /> 
