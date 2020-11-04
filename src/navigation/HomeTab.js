@@ -3,9 +3,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "./../screens/NotificationScreen";
-import PostStackScreen from "./PostStack";
-import CommentStackScreen from "./CommentStack";
-import { StyleSheet } from "react-native";
+import { AuthContext } from "../provider/AuthProvider";
 
 
 const HomeTab = createMaterialBottomTabNavigator();
@@ -13,11 +11,13 @@ const HomeTab = createMaterialBottomTabNavigator();
 
 const HomeTabScreen = () => {
   return (
-    <HomeTab.Navigator initialRouteName="HomeStack" activeColor="white"
+    <AuthContext.Consumer>
+        {(auth) => (
+    <HomeTab.Navigator initialRouteName="Home" activeColor="white"
     barStyle={{ backgroundColor: '#873FB2' }}>
       <HomeTab.Screen 
-        name="HomeStack"
-        component={CommentStackScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) =>
@@ -31,7 +31,8 @@ const HomeTabScreen = () => {
       />
       <HomeTab.Screen
         name="Notification"
-        component={PostStackScreen}
+        //component={()=><NotificationScreen currentUser={auth.CurrentUser} />}
+        children={()=><NotificationScreen currentUser={auth.CurrentUser} />}
         options={{
            tabBarLabel: "Notifications",
           tabBarIcon: ({ focused }) =>
@@ -46,7 +47,9 @@ const HomeTabScreen = () => {
             ),
         }}
       />
-    </HomeTab.Navigator>
+    </HomeTab.Navigator> 
+    )}
+    </AuthContext.Consumer>
   );
 };
 

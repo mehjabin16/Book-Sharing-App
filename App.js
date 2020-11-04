@@ -4,7 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import PostScreen from "./src/screens/PostScreen.js";
 import NotificationScreen from "./src/screens/NotificationScreen.js";
-import HomeTabScreen from "./src/navigation/HomeTab.js";
+import NotificationStackScreen from "./src/navigation/NotificationStack.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
 import ProfileScreen from "./src/screens/ProfileScreen.js";
@@ -19,7 +19,7 @@ const AuthStack = createStackNavigator();
 const AppDrawerScreen =() =>{
   return(
     <AppDrawer.Navigator initialRouteName="Home" >
-      <AppDrawer.Screen name= "Home" component={HomeTabScreen} />
+      <AppDrawer.Screen name= "Home" component={NotificationStackScreen} />
       <AppDrawer.Screen name= "Profile" component={ProfileScreen} />
      
     </AppDrawer.Navigator>

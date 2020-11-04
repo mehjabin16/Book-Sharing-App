@@ -4,14 +4,14 @@ import { Text, Card, Icon, Button, Input } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import { AuthContext } from "../provider/AuthProvider";
 import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
-import {storeDataJSON, getDataJSON} from "../functions/AsyncFunctions";
+import {storeDataJSON, getDataJSON, removeData} from "../functions/AsyncFunctions";
 
 
 const ProfileScreen = (props) => {
   const [Bithdate, setBirthdate] = useState("");
   const [Address, setAdress] = useState("");
   const [Work, setWork] = useState("");
-  const [UserProfile, setUserProfile] = useState([]);
+  //const [UserProfile, setUserProfile] = useState([]);
 
  
 
@@ -48,6 +48,11 @@ const ProfileScreen = (props) => {
           title="  Delete Account?"
           titleStyle ={styles.button2Style}
           icon={<AntDesign name="delete" size={28} color="red" />}
+          onPress={
+          function(){
+            removeData('userprofile')
+          }
+        }
         />
         </View>
           <Card>
@@ -84,15 +89,15 @@ const ProfileScreen = (props) => {
               };
               storeDataJSON('userprofile', User);
               //console.log(User);
-              setUserProfile(await getDataJSON('userprofile'));
-               //console.log(UserProfile.work);
+              auth.setUserProfile(await getDataJSON('userprofile'));
+               //console.log(UserProfile);
               }
             }
             />
             <View style={{marginTop:10}} >
-             <Text style={styles.txt2style}>Born On  :        {UserProfile.birthdate}</Text>
-              <Text style={styles.txt2style}>Address :        {UserProfile.address}</Text>
-              <Text style={styles.txt2style}>Works At:        {UserProfile.work} </Text>
+             <Text style={styles.txt2style}>Born On  :        {auth.UserProfile.birthdate}</Text>
+              <Text style={styles.txt2style}>Address :        {auth.UserProfile.address}</Text>
+              <Text style={styles.txt2style}>Works At:        {auth.UserProfile.work} </Text>
             </View>
           </Card>
           </ScrollView>

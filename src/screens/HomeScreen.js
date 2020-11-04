@@ -5,13 +5,14 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 import {AuthContext} from "../provider/AuthProvider";
 import PostCard from "./../components/PostCard";
 import HeaderHome from "../components/HeaderHome";
+import PostScreen from "./PostScreen";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
 
 
 const HomeScreen = (props) => {
   const [curDate, setCurDate] = useState("");
-  const [Postbody, setPostbody] = useState("");
-  const [Postcards, setPostcards] = useState([]);
+  const [NewPost, setNewPost] = useState("");
+  const [PostList, setPostlist] = useState([]);
  
   useEffect(() =>{
    var date= new Date().getDate();
@@ -20,7 +21,11 @@ const HomeScreen = (props) => {
    setCurDate(date+'/'+month+'/'+year);
    const getData = async()=>
    {
-     setPostcards(await getDataJSON('posts'));
+     const posts= await getDataJSON('Post');
+     if(posts != null ){
+       setPostlist(posts)
+     }
+     
    }
    getData();
   },[]);
@@ -40,51 +45,44 @@ return(
         placeholder="What's On Your Mind?"
         leftIcon={<Entypo name="pencil" size={24} color="black" />}
         onChangeText ={function(val){
-          setPostbody(val);
+          setNewPost(val);
       }}
      
       />
       <Button title="Post" titleStyle={styles.button2Style}
        type="outline" onPress={
-            async function(){
-              if(Postcards !=null){
-                setPostcards(posts => [
-                  ...posts,
-                  {
+             function(){
+              var RandomNumber = Math.floor(Math.random() * 100) + 1;
+              const Pid = RandomNumber.toString();
+             
+                 let postInfo = {
                     name: auth.CurrentUser.name,
                     date: curDate,
-                    postbody: Postbody,
-                    key : Postbody,
-                  },
-                ]);
-              }
-              else{
-                const array = [];
-                array.push({
-                    name: auth.CurrentUser.name,
-                    date: curDate,
-                    postbody: Postbody,
-                    key : Postbody,
-                });
-                setPostcards(array)
-              }
-              await storeDataJSON('posts', Postcards);
+                    postbody: NewPost,
+                    key : Pid,
+                  }
+                  let postList = PostList.copyWithin()
+                  postList.push(postInfo) 
+                  setPostlist(postList)
+           
+              storeDataJSON('Post', PostList);
+              console.log(PostList);
+             
            } }
          />
          
     </Card>  
     <FlatList
-      data ={Postcards}
-      renderItem ={ postitem =>{
+      data ={PostList}
+      renderItem ={ function({item}){
         return(
           <PostCard
-          author={postitem.item.name}
-          date= {postitem.item.date}
-          body= {postitem.item.postbody}
-           
+          currentUser = {auth.CurrentUser}
+          posts ={item}  
           />
       )}}
       /> 
+
   </View>
 )}
     </AuthContext.Consumer>
@@ -99,6 +97,7 @@ const styles = StyleSheet.create({
       },
       viewStyle: {
         flex: 1,
+        backgroundColor:"white"
       },
       button2Style:{
         color: "#873FB2"

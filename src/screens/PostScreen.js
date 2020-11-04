@@ -8,9 +8,17 @@ import { AuthContext } from "../provider/AuthProvider";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
 
 const PostScreen = (props) => {
+  //console.log(props);
+  const post = props.route.params.posts
+  const currUser = props.route.params.currentUser
+  const likecount =props.route.params.LikeCount
   const [CurDate, setCurDate] = useState("");
-  const [Commentbody, setCommentbody] = useState("");
+  const [NewComment, setNewComment] = useState("");
   const [CommentList, setCommentList] = useState([]);
+  const [CommenterInfo, setCommenterInfo] = useState([]);
+  const [CommentCount, setCommentCount] = useState(0);
+  const [PostCommentInfo, setPostCommentInfo] = useState([]);
+
  
   useEffect(() =>{
    var date= new Date().getDate();
@@ -19,7 +27,20 @@ const PostScreen = (props) => {
    setCurDate(date+'/'+month+'/'+year);
    const getData = async()=>
    {
-     setCommentList(await getDataJSON('comments'));
+    let allcomments =[]
+    allcomments= await getDataJSON(post.key+'Comment');
+    let len = allcomments.length
+    if(allcomments != null ){
+      setCommentList(allcomments)
+      setCommentCount(len)
+      console.log(CommentCount)  
+    }
+    let commenters = await getDataJSON(post.key+'Commenter')
+    if(commenters!=null ){
+      setCommenterInfo(commenters)  
+    }
+    //let postReaction = await getDataJSON(post.name+"Reaction")
+      //setPostCommentInfo(postReaction)
    }
    getData();
   },[]);
@@ -37,11 +58,11 @@ const PostScreen = (props) => {
           type="outline"
           title="Go Back"
           titleStyle={styles.buttonStyle}
-          buttonStyle={{alignSelf:"flex-start", marginLeft:16, paddingRight:280}}
+          buttonStyle={{alignSelf:"flex-start", marginLeft:5,paddingRight:300}}
           icon={<AntDesign name="back" size={28} color="black"/>}
           onPress={
             function(){
-              props.navigation.navigate("Notification");
+              props.navigation.navigate("HomeTab");
             }} 
           />
           
@@ -53,27 +74,20 @@ const PostScreen = (props) => {
              icon={{ name: "user", type: "font-awesome", color: "black" }} 
              activeOpacity={1}
              />
-              <Text h4Style={{ padding: 10 }} h4>
-               {auth.CurrentUser.name}
-              </Text>
+              <Text h4Style={{ padding: 10 }} h4>{post.name}</Text>
             </View>
-            <Text style={{ fontStyle: "italic" }}> 
-              posted on {props.date}
-            </Text>
+            <Text style={{ fontStyle: "italic" }}>  posted on {post.date}</Text>
             <Card.Divider />
-            <Text
-             style={{ paddingVertical: 10, }}>
-           {props.body}
-          </Text>
+            <Text style={{ paddingVertical: 10, }}> {post.postbody}</Text>
           <Card.Divider />
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               
               <Text style={{ paddingHorizontal: 10 }}>
-               Like:                 
+               Like:  {likecount}               
               </Text>
               <Text style={{ paddingHorizontal: 10 }}>
-               Comment:                 
+               Comments: {CommentCount}                
               </Text>
             </View>            
           </Card>     
@@ -84,46 +98,53 @@ const PostScreen = (props) => {
         placeholder="Write Something"
         leftIcon={<Entypo name="pencil" size={24} color="black" />}
         onChangeText ={function(val){
-          setCommentbody(val);
+          setNewComment(val);
       }}
       />
       <Button title="Comment" titleStyle={styles.button2Style}
        type="outline"
        onPress={
         async function(){
-          if(CommentList !=null){
-            setCommentList(comments => [
-              ...comments,
-              {
-                name: auth.CurrentUser.name,
-                date: CurDate,
-                commentbody: Commentbody,
-                key : Commentbody,
-              },
-            ]);
-          }
-          else{
-            const array = [];
-            array.push({
-                name: auth.CurrentUser.name,
-                date: CurDate,
-                commentbody: Commentbody,
-                key : Commentbody,
-            });
-            setCommentList(array)
-          }
-          await storeDataJSON('comments', CommentList);
+          var RandomNumber = Math.floor(Math.random() * 100) + 1;
+          const Cid = RandomNumber.toString();
+                 let commentInfo = {
+                    name: currUser.name,
+                    date: CurDate,
+                    commentbody: NewComment,
+                    key : Cid,
+                    pid: post.key,
+                    author: post.name,
+                  }
+                  let commentList = CommentList.copyWithin()
+                  commentList.push(commentInfo) 
+                  setCommentList(commentList)
+              storeDataJSON(post.key+'Comment', CommentList);
+              console.log(CommentList);
+
+              let commenterinfo ={
+                 commenter: currUser.name ,
+                 cid: CommentList.key,
+                 pid: post.key,
+                 postauthor: post.name,   
+              }
+              let allcommenter = CommenterInfo.copyWithin()
+              allcommenter.push(commenterinfo) 
+              setCommenterInfo(allcommenter)
+              storeDataJSON(post.key+'Commenter', CommenterInfo);
+              console.log(CommenterInfo);
+
+            
        } } >
        </Button>
        </Card>
        <FlatList
       data ={CommentList}
-      renderItem ={ postitem =>{
+      renderItem ={ function({item}){
         return(
           <CommentCard
-          author={postitem.item.name}
-          date= {postitem.item.date}
-          body= {postitem.item.commentbody}    
+           comments = {item}
+           currentUser ={auth.CurrentUser}
+              
           />
          )}}
        /> 
