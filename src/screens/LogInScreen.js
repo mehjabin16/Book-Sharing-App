@@ -4,6 +4,7 @@ import {Input, Button, Card} from "react-native-elements";
 import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
 import {AuthContext} from "../provider/AuthProvider";
 import {getDataJSON} from "../functions/AsyncFunctions";
+import * as firebase from "firebase";
 
 
 const LogInScreen = (props) => {
@@ -43,19 +44,21 @@ return(
              title=" Sign In"
              type="solid"
              buttonStyle ={styles.buttonStyle}
-             onPress={async function() {
-                   let UserData =await getDataJSON(Email);
-                   if(UserData.password == Password)
-                   {     
-                   auth.setIsLoggedIn(true);   
-                   auth.setCurrentUser(UserData); 
-                   console.log(UserData);  
-                   }
-                   else{
-                       alert('Login Failed');
-                       console.log(UserData);
-                   }
-                }}
+             onPress={() => {
+                //setIsLoading(true);
+                firebase
+                  .auth()
+                  .signInWithEmailAndPassword(Email, Password)
+                  .then((userCreds) => {
+                    //setIsLoading(false);
+                    auth.setIsLoggedIn(true);
+                    auth.setCurrentUser(userCreds.user);
+                  })
+                  .catch((error) => {
+                    //setIsLoading(false);
+                    alert(error);
+                  });
+              }}
             />
            <View style={{ flexDirection: "row", justifyContent:"center", marginLeft:10, marginTop:20}}>
             

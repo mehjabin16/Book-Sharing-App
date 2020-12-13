@@ -8,14 +8,25 @@ import NotificationStackScreen from "./src/navigation/NotificationStack.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
 import ProfileScreen from "./src/screens/ProfileScreen.js";
-
-
 import {AuthContext, AuthProvider} from "./src/provider/AuthProvider";
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAB_r6Xq_8HOnKTyRK-DSk3UNEjx7m2pws",
+  authDomain: "myblog-84d6d.firebaseapp.com",
+  databaseURL: "https://myblog-84d6d-default-rtdb.firebaseio.com",
+  projectId: "myblog-84d6d",
+  storageBucket: "myblog-84d6d.appspot.com",
+  messagingSenderId: "60212282971",
+  appId: "1:60212282971:web:7565e0b05b5f3569a4e17e"
+};
+// Initialize Firebase
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig);
+}
 
 const AppDrawer = createDrawerNavigator();
 const AuthStack = createStackNavigator();
-
-
 const AppDrawerScreen =() =>{
   return(
     <AppDrawer.Navigator initialRouteName="Home" >

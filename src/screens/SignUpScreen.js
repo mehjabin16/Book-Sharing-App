@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import {View, StyleSheet, Text,Image} from "react-native";
 import {Input, Button, Card} from "react-native-elements";
 import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
+import Loading from "../components/Loading";
 import { storeDataJSON } from "../functions/AsyncFunctions";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 const SignUpScreen = (props) => {
     const [Name, setName] =useState("");
     const [ContactNo, setContactNo] = useState("");
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
-    const [Guid, setGuid] = useState("");
+    //const [Guid, setGuid] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+  if (isLoading) {
+    return <Loading />;
+  } else {
     
 
 return(
@@ -57,22 +64,42 @@ return(
              title=' Sign Up!'
              buttonStyle ={styles.buttonStyle}
              type='solid'
-             onPress={               
-                 function(){
-                     var RandomNumber = Math.floor(Math.random() * 100) + 1;
-                     const id = RandomNumber.toString();
-                     console.log(id);
-                     let currentUser ={
-                         name:Name,
-                         contact:ContactNo,
-                         email:Email,
-                         password:Password,
-                         guid: id,
-                     };
-                 storeDataJSON(Email, currentUser);
-                 props.navigation.navigate("LogIn");
-
-                 }}
+             onPress={() => {
+                if (Name && ContactNo && Email && Password) {
+                  //setIsLoading(true);
+                  firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(Email, Password)
+                    .then((userCreds) => {
+                      userCreds.user.updateProfile({ displayName: Name });
+                      firebase
+                        .firestore()
+                        .collection("users")
+                        .doc(userCreds.user.uid)
+                        .set({
+                          name: Name,
+                          contactno: ContactNo,
+                          email: Email,
+                        })
+                        .then(() => {
+                         // setIsLoading(false);
+                          alert("Account created successfully!");
+                          console.log(userCreds.user);
+                          props.navigation.navigate("LogIn");
+                        })
+                        .catch((error) => {
+                          //setIsLoading(false);
+                          alert(error);
+                        });
+                    })
+                    .catch((error) => {
+                      //setIsLoading(false);
+                      alert(error);
+                    });
+                } else {
+                  alert("Fields can not be empty!");
+                }
+              }}
             />
 
         <View style={{ flexDirection: "row", justifyContent:"center", marginLeft:10, marginTop:20}}>
@@ -93,7 +120,7 @@ return(
     </View>
 );
 
-}
+}}
 
 const styles = StyleSheet.create({
     viewStyle: {

@@ -4,11 +4,12 @@ import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import { storeDataJSON, getDataJSON } from "../functions/AsyncFunctions";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 
 const PostCard = (props) => {
-  const posts=props.posts
-  const currentUser=props.currentUser
+ 
   const [Icon, setIcon]=useState("like2");
   const [LikeCount, setLikeCount] = useState(0);
   const [PostReactions, setPostReactions] = useState([]);
@@ -52,11 +53,11 @@ const PostCard = (props) => {
           icon={{ name: "user", type: "font-awesome", color: "black" }} 
           activeOpacity={1}
         />
-        <Text h4Style={{ padding: 10 }} h4>{posts.name}</Text>
+        <Text h4Style={{ padding: 10 }} h4>{props.author}</Text>
       </View>
-      <Text style={{ fontStyle: "italic" }}>  posted on {posts.date}</Text>
+      <Text style={{ fontStyle: "italic" }}>  posted on {props.date}</Text>
       <Text style={{ paddingVertical: 10, }}>
-        {posts.postbody}
+        {props.body}
       </Text>
       <Card.Divider />
 
@@ -66,34 +67,21 @@ const PostCard = (props) => {
           type="outline"
           titleStyle = {styles.button2Style}
           icon={<AntDesign name={Icon} size={24} color="#873FB2" />}
-          onPress={
-            function(){
-                 let likes = LikeCount+1;
-                 setLikeCount(likes);
-                 console.log(LikeCount);
-                 setIcon("like1")
-
-                 let likedusers ={
-                   postid: posts.key,
-                   reactor: currentUser.name,
-                   author: posts.name,
-                 }
-                 let userlist = Liked.copyWithin()
-                 userlist.push(likedusers ) 
-                 setLiked(userlist)
-                 storeDataJSON(posts.key+'Like', Liked);
-                 console.log(Liked);
-
-                 
-                 
-            }
+          onPress={ function()  {
+            let likes = LikeCount+1;
+            setLikeCount(likes);
+            console.log(LikeCount);
+            setIcon("like1");
+           
+            
+          }
           }
         />
 
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
            title="Comment" 
-           onPress={ ()=>navigation.navigate('Post',{posts, currentUser, LikeCount})} 
+           onPress={ function()  {}} 
            >
 
            </Button>
