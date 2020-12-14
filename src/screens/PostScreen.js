@@ -1,23 +1,42 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Text, Card, Avatar, Button, Input, Icon } from "react-native-elements";
-import { FontAwesome, Entypo, MaterialIcons} from '@expo/vector-icons';
+import { AntDesign, Entypo, MaterialIcons, FontAwesome} from '@expo/vector-icons';
 import HeaderHome from "./../components/HeaderHome";
 import CommentCard from "./../components/CommentCard"
 import { AuthContext } from "../provider/AuthProvider";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 
 const PostScreen = (props) => {
   //console.log(props);
-  const post = props.route.params.posts
-  const currUser = props.route.params.currentUser
-  const likecount =props.route.params.LikeCount
+  //const post = props.route.params.posts
+  //const currUser = props.route.params.currentUser
+  const likecount =props.route.params.likecount
   const [CurDate, setCurDate] = useState("");
   const [NewComment, setNewComment] = useState("");
-  const [CommentList, setCommentList] = useState([]);
+  const [commentList, setCommentList] = useState([]);
   const [CommentCount, setCommentCount] = useState(0);
   const [PostReactions, setPostReactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadComments = async () => {
+    setIsLoading(true);
+    firebase
+        .firestore()
+        .collection('posts')
+        .doc(props.route.params.postID)
+        .onSnapshot((querySnapShot) => {
+            setIsLoading(false);
+            setCommentList(querySnapShot.data().comments);
+        })
+        .catch((error) => {
+            setIsLoading(false);
+            alert(error);
+        })
+}
 
  
   useEffect(() =>{
@@ -25,29 +44,18 @@ const PostScreen = (props) => {
    var month= new Date().getMonth()+1;
    var year= new Date().getFullYear();
    setCurDate(date+'/'+month+'/'+year);
-   const getData = async()=>
-   {
-    let allcomments =[]
-    allcomments= await getDataJSON(post.key+'Comment');
-    let len = allcomments.length
-    if(allcomments != null ){
-      setCommentList(allcomments)
-      setCommentCount(len)
-      console.log(CommentCount)  
-    }
-    let commenters = await getDataJSON(post.name+'Reaction')
-    if(commenters!=null ){
-      setPostReactions(commenters)  
-    }
+   
     //let postReaction = await getDataJSON(post.name+"Reaction")
       //setPostCommentInfo(postReaction)
-   }
-   getData();
+   loadComments();
   },[]);
+  let likeButton = " ";
+    likeButton = " Like(".concat(likecount).concat(")");
 
   return (
     <AuthContext.Consumer>
       {(auth) => (
+       // <View>
         <View style={styles.viewStyle}>
            <HeaderHome
             DrawerFunction={() => {
@@ -75,21 +83,27 @@ const PostScreen = (props) => {
              icon={{ name: "user", type: "font-awesome", color: "black"}} 
              activeOpacity={1}
              />
-              <Text h4Style={{ padding: 10 }} h4>{post.name}</Text>
+              <Text h4Style={{ padding: 10 }} h4>{props.route.params.name}</Text>
             </View>
-            <Text style={{ fontStyle: "italic" }}>  posted on {post.date}</Text>
+            <Text style={{ fontStyle: "italic" }}>  posted on {props.route.params.date}</Text>
             <Card.Divider />
-            <Text style={{ paddingVertical: 10, }}> {post.postbody}</Text>
+            <Text style={{ paddingVertical: 10, }}> {props.route.params.post}</Text>
           <Card.Divider />
           <Card>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" ,justifyContent: "space-between"}}>
            
-              <Text style={{ paddingHorizontal: 10 , fontWeight:"bold" }}>
-               Like:  {likecount}               
-              </Text>
-              <Text style={{ paddingHorizontal: 80, fontWeight:"bold" }}>
-               Comments: {CommentCount}                
-              </Text>
+            <Button
+               title= { likeButton}
+               type="outline"
+               titleStyle = {styles.button2Style}
+               icon={<AntDesign name={"like1"} size={24} color="#873FB2" />}
+            />
+            <Button
+               title= {" Comment()"}
+               type="outline"
+               titleStyle = {styles.button2Style}
+               icon={<FontAwesome name={"comments"} size={24} color="#873FB2" />}
+          />
             </View>            
           </Card>     
           </Card>     
@@ -106,45 +120,41 @@ const PostScreen = (props) => {
        type="outline"
        onPress={
         async function(){
-          var RandomNumber = Math.floor(Math.random() * 100) + 1;
-          const Cid = RandomNumber.toString();
-                 let commentInfo = {
-                    name: currUser.name,
-                    date: CurDate,
-                    commentbody: NewComment,
-                    key : Cid,
-                    pid: post.key,
-                    author: post.name,
-                  }
-                  let commentList = CommentList.copyWithin()
-                  commentList.push(commentInfo) 
-                  setCommentList(commentList)
-                  storeDataJSON(post.key+'Comment', CommentList);
-                  console.log(CommentList);
-
-              let commenterinfo ={
-                 commenter: currUser.name ,
-                 pid: post.key,
-                 postauthor: post.name,  
-                 status:"comment" ,
-              }
-              let commenter = PostReactions.copyWithin()
-              commenter.push(commenterinfo) 
-              setPostReactions(commenter)
-              storeDataJSON(post.name+'Reaction', PostReactions);
-              console.log(PostReactions);
-
-            
+          setIsLoading(true);
+             firebase
+            .firestore()
+            .collection('posts')
+            .doc(props.route.params.postID)
+            .set(
+              {
+                   comments: [...commentList,
+                    {
+                    comment: NewComment,
+                    commented_by: auth.CurrentUser.displayName,
+                    commenting_date: CurDate
+                    }]
+               },
+              { merge: true }
+            )
+            .then(() => {
+                 setIsLoading(false);
+               })
+            .catch((error) => {
+              setIsLoading(false);
+              alert(error);
+              })
+                  
        } } >
        </Button>
        </Card>
        <FlatList
-      data ={CommentList}
+      data ={commentList}
       renderItem ={ function({item}){
         return(
           <CommentCard
-           comments = {item}
-           currentUser ={auth.CurrentUser}
+          name={item.commented_by}
+          date={item.commenting_date}
+          comment={item.comment}
               
           />
          )}}
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   viewStyle: {
-    backgroundColor:"white",
+    backgroundColor:"#eae5ff",
     flex: 1,
   },
   buttonStyle:{

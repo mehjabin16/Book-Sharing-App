@@ -72,7 +72,8 @@ return(
      
       />
       <Button title="Post" titleStyle={styles.button2Style}
-       type="outline" onPress={
+      buttonStyle ={styles.buttonStyle}
+       type="solid" onPress={
         function () {
           setLoading(true);
           firebase
@@ -107,6 +108,9 @@ return(
           author={item.data.author}
           date={item.data.created_at}
           body={item.data.body}
+          authorID={item.data.userId}
+          postID={item.id}
+          userID={auth.CurrentUser.uid}
           />
       )}}
       /> 
@@ -125,10 +129,13 @@ const styles = StyleSheet.create({
       },
       viewStyle: {
         flex: 1,
-        backgroundColor:"white"
+        backgroundColor:"#eae5ff"
+      },
+      buttonStyle :{
+        backgroundColor: "#873FB2"
       },
       button2Style:{
-        color: "#873FB2"
+        color: "white"
         
     },
 

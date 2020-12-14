@@ -7,39 +7,55 @@ import { storeDataJSON, getDataJSON } from "../functions/AsyncFunctions";
 import * as firebase from "firebase";
 import "firebase/firestore";
 
+import { AuthContext } from "../provider/AuthProvider";
+
 
 const PostCard = (props) => {
- 
+  
   const [Icon, setIcon]=useState("like2");
   const [LikeCount, setLikeCount] = useState(0);
   const [PostReactions, setPostReactions] = useState([]);
-  const [Liked, setLiked] = useState([]);
+  const [LikersList, setLikersList] = useState([]);
+  const [CommentList, setCommentList] = useState([]);
   const [CommentCount, setCommentCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [notificationList, setNotificationList] = useState([]);
  
   const navigation = useNavigation();
+  const LoadData = async () => {
+    setIsLoading(true);
+    firebase
+        .firestore()
+        .collection('posts')
+        .doc(props.postID)
+        .onSnapshot((querySnapShot) => {
+            setIsLoading(false);
+            //setCommentList(querySnapShot.data().comments);
+            let likers =[]
+            likers = querySnapShot.data().likers;
+            let len = likers.length
+            setLikersList(querySnapShot.data().likers);
+            setLikeCount(len+1)
+            
+            //setLikeStatus(querySnapShot.data().likers.includes(props.userID));
+        })
+        .catch((error) => {
+            setIsLoading(false);
+            alert(error);
+        })
+}
   
   useEffect(() =>{
     
-    const getData = async()=>
-    { 
-      //let postReaction = await getDataJSON(posts.name+"Reaction")
-      //setPostLikeInfo(postReaction)
-    let postReaction = await getDataJSON(posts.Email+"Reaction")
-    let likes =[]
-    likes = await getDataJSON(posts.key+'Like');
-    let len = likes.length
-    if(likes != null ){
-      setLiked(likes)
-      setLikeCount(len+1)
-     // setPostReactions(postReaction)
-      console.log(LikeCount)  
-    }
-             
-    }
-    getData();
+    LoadData();
    },[]);
 
+   let likeButton = " ";
+    likeButton = " Likes (".concat(LikeCount).concat(")");
+
   return (
+    <AuthContext.Consumer>
+    {(auth) => (
     <Card>
       <View
         style={{
@@ -53,9 +69,9 @@ const PostCard = (props) => {
           icon={{ name: "user", type: "font-awesome", color: "black" }} 
           activeOpacity={1}
         />
-        <Text h4Style={{ padding: 10 }} h4>{props.author}</Text>
+        <Text h4Style={{ padding: 10 }} h4> {props.author}</Text>
       </View>
-      <Text style={{ fontStyle: "italic" }}>  posted on {props.date}</Text>
+      <Text style={{ fontStyle: "italic" }}> posted on {props.date}</Text>
       <Text style={{ paddingVertical: 10, }}>
         {props.body}
       </Text>
@@ -63,17 +79,34 @@ const PostCard = (props) => {
 
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
-          title={LikeCount}
+          title= { likeButton}
           type="outline"
           titleStyle = {styles.button2Style}
           icon={<AntDesign name={Icon} size={24} color="#873FB2" />}
           onPress={ function()  {
-            let likes = LikeCount+1;
-            setLikeCount(likes);
-            console.log(LikeCount);
+            let likes = LikeCount+1;  
+            //console.log(LikeCount);
             setIcon("like1");
-           
-            
+            //console.log(props);
+            firebase
+              .firestore()
+              .collection('posts')
+              .doc(props.postID)
+              .set(
+               {
+                 likers: [...LikersList, auth.CurrentUser.uid],
+                 likes: likes
+               },
+               { merge: true }
+               )
+              .then(() => {
+                    setIsLoading(false);
+               })
+               .catch((error) => {
+                     setIsLoading(false);
+                     alert(error);
+                })
+                
           }
           }
         />
@@ -81,15 +114,25 @@ const PostCard = (props) => {
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
            title="Comment" 
-           onPress={ function()  {}} 
+           onPress={ ()=>navigation.navigate('Post',{
+            name: props.author,
+            post: props.body,
+            date: props.date,
+            authorID: props.authorID,
+            postID: props.postID,
+            likecount : LikeCount
+           })} 
            >
 
            </Button>
            
       </View>
     </Card>
-  );
-};
+   )}
+   </AuthContext.Consumer>
+)
+
+}
 const styles = StyleSheet.create({
   buttonStyle:{
       backgroundColor: "#873FB2"
