@@ -84,12 +84,12 @@ return(
               body: newpost,
               author: auth.CurrentUser.displayName,
               created_at: curDate,
-              likes: [],
+              likers: [],
               comments: [],
             })
-            .then(() => {
+            .then(function (doc) {
+              alert("Post created with id: " + doc.id );
               setLoading(false);
-              alert("Post created Successfully!");
             })
             .catch((error) => {
               setLoading(false);
@@ -97,7 +97,7 @@ return(
             });
         }}
          />
-         <ActivityIndicator size="large" color="red" animating={loading} />
+         <ActivityIndicator size="large" color="blue" animating={loading} />
          
     </Card>  
     <FlatList
@@ -111,6 +111,7 @@ return(
           authorID={item.data.userId}
           postID={item.id}
           userID={auth.CurrentUser.uid}
+          likers = {item.likers}
           />
       )}}
       /> 

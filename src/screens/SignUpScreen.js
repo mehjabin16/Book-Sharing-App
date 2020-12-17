@@ -81,10 +81,10 @@ return(
                           contactno: ContactNo,
                           email: Email,
                         })
-                        .then(() => {
+                        .then(function (doc) {
                          // setIsLoading(false);
-                          alert("Account created successfully!");
-                          console.log(userCreds.user);
+                          alert("Account created successfully with id: " + userCreds.user.uid);
+                          //console.log(userCreds.user);
                           props.navigation.navigate("LogIn");
                         })
                         .catch((error) => {

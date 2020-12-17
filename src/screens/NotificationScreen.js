@@ -5,26 +5,38 @@ import HeaderHome from "./../components/HeaderHome";
 import NotificationCard from "./../components/NotificationCard";
 import { AuthContext } from "../provider/AuthProvider";
 import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 
 const NotificationScreen = (props) => {
-  //const [LikeList, setLikeList] = useState([]);
-  const [PostReactions, setPostReactions] = useState([]);
+  console.log(props.currentUser.uid);
+  const [isLoading, setIsLoading] = useState(false);
+  const [NotificationList, setNotificationList] = useState([]);
+  
+  const loadNotificationData = async () => {
+
+    setIsLoading(true);
+    firebase
+        .firestore()
+        .collection('users')
+        .doc(props.currentUser.uid)
+        .onSnapshot((querySnapShot) => {
+          setIsLoading(false);
+          setNotificationList(querySnapShot.data().notifications);
+          
+      })
+        .catch((error) => {
+            setIsLoading(false);
+            alert(error);
+        })
+  }
+  
   
   
   useEffect(() =>{
    
-    const getData = async()=>
-    {
-      let reactionList = await getDataJSON(props.currentUser.name+'Reaction')
-        if(reactionList !=null){
-        setPostReactions(reactionList)
-        console.log(reactionList)
-        
-        }
-      
-    }
-    getData();
+    loadNotificationData();
    },[]);
 
   return (
@@ -39,14 +51,18 @@ const NotificationScreen = (props) => {
     
     <FlatList
 
-      data ={PostReactions}
-      renderItem ={ function({item})
-      {
+      data ={NotificationList}
+      renderItem ={ function({item}){
         return(
           <NotificationCard
-          currentUser = {auth.CurrentUser}
-          notifications={item}
-          commenter ={item.commenter}
+          name={item.name}
+          date={item.posting_date}
+          //post={notificationItem.item.data.post}
+          postID={item.postID}
+          authorID={item.authorID}
+          notificationFrom={item.notification_from}
+          type={item.type}
+
           />
       )}}
       /> 

@@ -7,24 +7,17 @@ import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunct
 import { useNavigation } from '@react-navigation/native';
 
 const NotificationCard = (props) => {
- const notifications=props.notificatiions 
- const currentUser=props.currentUser
-  const [statement ,setStatement]=useState("")
-  const [check,setCheck]=useState(false)
+ const reactiontype =props.type;
   const navigation = useNavigation();
-  //console.log(notification.status)
-  /*const checkNotificationStatus=()=>{
-    if(notification.status=="comment"){
 
-    setStatement("commented on your post")
-    }   
-    setCheck(true)
-
-}
-
-if(!check)
-checkNotificationStatus()*/
-
+  let reaction = " ";
+  if (reactiontype=="like"){
+  reaction = "liked";
+  }
+  else if (reactiontype =="comment") {
+    reaction = "commented";
+  }
+ 
   return (
     <AuthContext.Consumer>
       {(auth) => (
@@ -44,13 +37,19 @@ checkNotificationStatus()*/
                 activeOpacity={1}
                 onPress ={
                   function(){
-                    ()=>navigation.navigate('Post' ,{currentUser} );
+                    ()=>navigation.navigate('Post' ,{
+                      author: props.name,
+                      //post: props.body,
+                      date: props.date,
+                      authorID: props.authorID,
+                      postID: props.postID,
+                     } );
                   }
                 }
               />
-               <Text >  {props.commenter} </Text>
+               <Text >  {props.notificationFrom} </Text>
                 
-                <Text >commented on your post</Text>
+                <Text >{reaction} your post</Text>
             </View>
           </Card>
         </View>

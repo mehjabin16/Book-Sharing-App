@@ -14,10 +14,8 @@ const PostCard = (props) => {
   
   const [Icon, setIcon]=useState("like2");
   const [LikeCount, setLikeCount] = useState(0);
-  const [PostReactions, setPostReactions] = useState([]);
   const [LikersList, setLikersList] = useState([]);
   const [CommentList, setCommentList] = useState([]);
-  const [CommentCount, setCommentCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [notificationList, setNotificationList] = useState([]);
  
@@ -30,28 +28,40 @@ const PostCard = (props) => {
         .doc(props.postID)
         .onSnapshot((querySnapShot) => {
             setIsLoading(false);
-            //setCommentList(querySnapShot.data().comments);
-            let likers =[]
-            likers = querySnapShot.data().likers;
-            let len = likers.length
+            //setCommentList(querySnapShot.data().comments)
             setLikersList(querySnapShot.data().likers);
-            setLikeCount(len+1)
-            
-            //setLikeStatus(querySnapShot.data().likers.includes(props.userID));
+            let likeCount = LikersList.length
+            setLikeCount(likeCount)     
         })
         .catch((error) => {
             setIsLoading(false);
             alert(error);
         })
 }
+
+const loadNotifications = async () => {
+  setIsLoading(true);
+  firebase
+      .firestore()
+      .collection('users')
+      .doc(props.authorID)
+      .onSnapshot((querySnapShot) => {
+          setIsLoading(false);
+          setNotificationList(querySnapShot.data().notifications);
+      })
+      .catch((error) => {
+          setIsLoading(false);
+          alert(error);
+      })
+}
   
   useEffect(() =>{
-    
+    loadNotifications();
     LoadData();
    },[]);
-
+   let likeCount = LikersList.length
    let likeButton = " ";
-    likeButton = " Likes (".concat(LikeCount).concat(")");
+    likeButton = " Likes (".concat(likeCount).concat(")");
 
   return (
     <AuthContext.Consumer>
@@ -84,7 +94,7 @@ const PostCard = (props) => {
           titleStyle = {styles.button2Style}
           icon={<AntDesign name={Icon} size={24} color="#873FB2" />}
           onPress={ function()  {
-            let likes = LikeCount+1;  
+            //let likes = LikeCount+1;  
             //console.log(LikeCount);
             setIcon("like1");
             //console.log(props);
@@ -95,7 +105,7 @@ const PostCard = (props) => {
               .set(
                {
                  likers: [...LikersList, auth.CurrentUser.uid],
-                 likes: likes
+                 //likes: likes
                },
                { merge: true }
                )
@@ -106,15 +116,45 @@ const PostCard = (props) => {
                      setIsLoading(false);
                      alert(error);
                 })
-                
+                if (props.authorID != auth.CurrentUser.uid) {
+                  firebase
+                      .firestore()
+                      .collection('users')
+                      .doc(props.authorID)
+                      .set(
+                          {  notifications: [...notificationList,
+                            {
+
+                              type: "like",
+                              notification_from: auth.CurrentUser.displayName,
+                              notified_at: firebase.firestore.Timestamp.now().toString(),
+                              posting_date: props.date,
+                              postID: props.postID,
+                              authorID: props.authorID,
+                              name: props.author,
+                            }]
+                          },
+                         { merge: true }
+                      )
+                      .then(() => {
+                          setIsLoading(false);
+                      })
+                      .catch((error) => {
+                          setIsLoading(false);
+                          alert(error);
+                      })
+
+              }
           }
-          }
+      }
         />
 
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
            title="Comment" 
-           onPress={ ()=>navigation.navigate('Post',{
+           onPress={ ()=>
+          
+            navigation.navigate('Post',{
             name: props.author,
             post: props.body,
             date: props.date,

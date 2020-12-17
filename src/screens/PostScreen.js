@@ -12,14 +12,13 @@ import "firebase/firestore";
 
 const PostScreen = (props) => {
   //console.log(props);
-  //const post = props.route.params.posts
-  //const currUser = props.route.params.currentUser
+
   const likecount =props.route.params.likecount
   const [CurDate, setCurDate] = useState("");
   const [NewComment, setNewComment] = useState("");
   const [commentList, setCommentList] = useState([]);
+  const [notificationList, setNotificationList] = useState([]);
   const [CommentCount, setCommentCount] = useState(0);
-  const [PostReactions, setPostReactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadComments = async () => {
@@ -37,6 +36,21 @@ const PostScreen = (props) => {
             alert(error);
         })
 }
+const loadNotifications = async () => {
+  setIsLoading(true);
+  firebase
+      .firestore()
+      .collection('users')
+      .doc(props.route.params.authorID)
+      .onSnapshot((querySnapShot) => {
+          setIsLoading(false);
+          setNotificationList(querySnapShot.data().notifications);
+      })
+      .catch((error) => {
+          setIsLoading(false);
+          alert(error);
+      })
+}
 
  
   useEffect(() =>{
@@ -48,6 +62,7 @@ const PostScreen = (props) => {
     //let postReaction = await getDataJSON(post.name+"Reaction")
       //setPostCommentInfo(postReaction)
    loadComments();
+   loadNotifications();
   },[]);
   let likeButton = " ";
     likeButton = " Like(".concat(likecount).concat(")");
@@ -55,7 +70,6 @@ const PostScreen = (props) => {
   return (
     <AuthContext.Consumer>
       {(auth) => (
-       // <View>
         <View style={styles.viewStyle}>
            <HeaderHome
             DrawerFunction={() => {
@@ -143,6 +157,34 @@ const PostScreen = (props) => {
               setIsLoading(false);
               alert(error);
               })
+              if (props.route.params.authorID != auth.CurrentUser.uid) {
+                firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(props.route.params.authorID)
+                    .set(
+                        {  notifications: [...notificationList,
+                          {
+
+                            type: "comment",
+                            notification_from: auth.CurrentUser.displayName,
+                            notified_at: firebase.firestore.Timestamp.now().toString(),
+                            posting_date: props.route.params.date,
+                            postID: props.route.params.postID,
+                            authorID: props.route.params.authorID,
+                            name: props.route.params.name,
+                          }]
+                        },
+                       { merge: true }
+                    )
+                    .then(() => {
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        setIsLoading(false);
+                        alert(error);
+                    })
+                  }
                   
        } } >
        </Button>
