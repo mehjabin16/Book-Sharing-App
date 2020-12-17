@@ -23,7 +23,7 @@ const HomeScreen = (props) => {
     firebase
       .firestore()
       .collection("posts")
-      .orderBy("created_at", "desc")
+      .orderBy("created_at", "asc")
       .onSnapshot((querySnapshot) => {
         let temp_posts = [];
         querySnapshot.forEach((doc) => {

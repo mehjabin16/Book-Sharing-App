@@ -13,8 +13,10 @@ import "firebase/firestore";
 const PostScreen = (props) => {
   //console.log(props);
 
-  const likecount =props.route.params.likecount
+  //const likecount =props.route.params.likecount
   const [CurDate, setCurDate] = useState("");
+  const [LikeCount, setLikeCount] = useState(0);
+  const [LikersList, setLikersList] = useState([]);
   const [NewComment, setNewComment] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [notificationList, setNotificationList] = useState([]);
@@ -30,6 +32,11 @@ const PostScreen = (props) => {
         .onSnapshot((querySnapShot) => {
             setIsLoading(false);
             setCommentList(querySnapShot.data().comments);
+            let commentCount = commentList.length ;
+            setCommentCount(commentCount);
+            setLikersList(querySnapShot.data().likers);
+            let likeCount = LikersList.length;
+            setLikeCount(likeCount) ;
         })
         .catch((error) => {
             setIsLoading(false);
@@ -64,8 +71,13 @@ const loadNotifications = async () => {
    loadComments();
    loadNotifications();
   },[]);
-  let likeButton = " ";
-    likeButton = " Like(".concat(likecount).concat(")");
+    let likeCount = LikersList.length
+    let likeButton = " ";
+    likeButton = " Like(".concat(likeCount).concat(")");
+    
+    let commentCount = commentList.length
+    let commentButton = " ";
+    commentButton = " Comments (".concat(commentCount).concat(")");
 
   return (
     <AuthContext.Consumer>
@@ -113,7 +125,7 @@ const loadNotifications = async () => {
                icon={<AntDesign name={"like1"} size={24} color="#873FB2" />}
             />
             <Button
-               title= {" Comment()"}
+               title= { commentButton}
                type="outline"
                titleStyle = {styles.button2Style}
                icon={<FontAwesome name={"comments"} size={24} color="#873FB2" />}
@@ -170,6 +182,7 @@ const loadNotifications = async () => {
                             notification_from: auth.CurrentUser.displayName,
                             notified_at: firebase.firestore.Timestamp.now().toString(),
                             posting_date: props.route.params.date,
+                            post: props.route.params.post,
                             postID: props.route.params.postID,
                             authorID: props.route.params.authorID,
                             name: props.route.params.name,

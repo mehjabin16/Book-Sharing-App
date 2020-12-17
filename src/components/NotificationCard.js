@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Card, Avatar } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import { AuthContext } from "../provider/AuthProvider";
@@ -11,47 +11,53 @@ const NotificationCard = (props) => {
   const navigation = useNavigation();
 
   let reaction = " ";
+  let icon = '';
   if (reactiontype=="like"){
-  reaction = "liked";
+  reaction = "liked"
+  icon = 'like';
   }
   else if (reactiontype =="comment") {
     reaction = "commented";
+    icon = 'comment';
   }
  
   return (
     <AuthContext.Consumer>
       {(auth) => (
         <View style={styles.viewStyle}>
-         
-          <Card>
-            <View style={{ flexDirection: "row", alignItems: "center" ,padding:6}}>
+         <TouchableOpacity 
+         onPress ={
+          function(){
+              
+              navigation.navigate('Post' ,{
+              name: props.name,
+              post: props.post,
+              date: props.date,
+              authorID: props.authorID,
+              postID: props.postID,
+             } );
+          }
+        }
+         >
+          <Card >
+            <View style={{ flexDirection: "row", alignItems: "center" , backgroundColor: "#eae5ff"}}>
               <Avatar
-                containerStyle={{ backgroundColor: "#F6EBF9" }}
+                containerStyle={{ backgroundColor: "#F6EBF9", height:50, width:40}}
                 
                 icon={{
-                  name: "commenting",
-                  type: "font-awesome",
+                  name: icon,
+                  type: "evilicon",
                   color: "black",
-                  size:20
+                  size:24
                 }}
                 activeOpacity={1}
-                onPress ={
-                  function(){
-                    ()=>navigation.navigate('Post' ,{
-                      author: props.name,
-                      //post: props.body,
-                      date: props.date,
-                      authorID: props.authorID,
-                      postID: props.postID,
-                     } );
-                  }
-                }
               />
                <Text >  {props.notificationFrom} </Text>
                 
                 <Text >{reaction} your post</Text>
             </View>
           </Card>
+          </TouchableOpacity>
         </View>
       )}
     </AuthContext.Consumer>

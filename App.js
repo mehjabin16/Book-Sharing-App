@@ -29,11 +29,17 @@ const AppDrawer = createDrawerNavigator();
 const AuthStack = createStackNavigator();
 const AppDrawerScreen =() =>{
   return(
+    <AuthContext.Consumer>
+    {(auth) => (
     <AppDrawer.Navigator initialRouteName="Home" >
       <AppDrawer.Screen name= "Home" component={NotificationStackScreen} />
-      <AppDrawer.Screen name= "Profile" component={ProfileScreen} />
-     
+      <AppDrawer.Screen name= "Profile" 
+      //component={ProfileScreen}
+      //screenOptions={({navigation})}
+      children={()=><ProfileScreen currentUser={auth.CurrentUser} />} />
     </AppDrawer.Navigator>
+    )}
+     </AuthContext.Consumer>
   )
 }
 const AuthStackScreen =() =>{

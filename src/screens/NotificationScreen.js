@@ -57,7 +57,7 @@ const NotificationScreen = (props) => {
           <NotificationCard
           name={item.name}
           date={item.posting_date}
-          //post={notificationItem.item.data.post}
+          post={item.post}
           postID={item.postID}
           authorID={item.authorID}
           notificationFrom={item.notification_from}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ const PostCard = (props) => {
   const [LikeCount, setLikeCount] = useState(0);
   const [LikersList, setLikersList] = useState([]);
   const [CommentList, setCommentList] = useState([]);
+  const [CommentCount, setCommentCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [notificationList, setNotificationList] = useState([]);
  
@@ -28,10 +29,12 @@ const PostCard = (props) => {
         .doc(props.postID)
         .onSnapshot((querySnapShot) => {
             setIsLoading(false);
-            //setCommentList(querySnapShot.data().comments)
+            setCommentList(querySnapShot.data().comments)
+            let commentCount = CommentList.length ;
+            setCommentCount(commentCount);
             setLikersList(querySnapShot.data().likers);
-            let likeCount = LikersList.length
-            setLikeCount(likeCount)     
+            let likeCount = LikersList.length;
+            setLikeCount(likeCount) ;
         })
         .catch((error) => {
             setIsLoading(false);
@@ -62,10 +65,33 @@ const loadNotifications = async () => {
    let likeCount = LikersList.length
    let likeButton = " ";
     likeButton = " Likes (".concat(likeCount).concat(")");
+  
+   let commentCount = CommentList.length
+   let commentButton = " ";
+   commentButton = " Comments (".concat(commentCount).concat(")");
+
 
   return (
     <AuthContext.Consumer>
     {(auth) => (
+    <TouchableOpacity onPress={
+      function(){
+        if (auth.CurrentUser.uid==props.authorID){
+          firebase
+          .firestore()
+          .collection('posts')
+          .doc(props.postID)
+          .delete()
+          .then(function() {
+            alert("Document successfully deleted!");
+           })
+           .catch(function(error) {
+            console.error("Error removing document: ", error);
+          })
+      }
+    }
+  }
+    >
     <Card>
       <View
         style={{
@@ -97,7 +123,6 @@ const loadNotifications = async () => {
             //let likes = LikeCount+1;  
             //console.log(LikeCount);
             setIcon("like1");
-            //console.log(props);
             firebase
               .firestore()
               .collection('posts')
@@ -129,6 +154,7 @@ const loadNotifications = async () => {
                               notification_from: auth.CurrentUser.displayName,
                               notified_at: firebase.firestore.Timestamp.now().toString(),
                               posting_date: props.date,
+                              post: props.body,
                               postID: props.postID,
                               authorID: props.authorID,
                               name: props.author,
@@ -151,7 +177,7 @@ const loadNotifications = async () => {
 
         <Button type="solid" 
            buttonStyle ={styles.buttonStyle}
-           title="Comment" 
+           title={commentButton} 
            onPress={ ()=>
           
             navigation.navigate('Post',{
@@ -160,7 +186,7 @@ const loadNotifications = async () => {
             date: props.date,
             authorID: props.authorID,
             postID: props.postID,
-            likecount : LikeCount
+            //likecount : LikeCount
            })} 
            >
 
@@ -168,6 +194,7 @@ const loadNotifications = async () => {
            
       </View>
     </Card>
+    </TouchableOpacity>
    )}
    </AuthContext.Consumer>
 )

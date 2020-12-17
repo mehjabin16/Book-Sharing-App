@@ -6,26 +6,51 @@ import ImageUpload from '../components/ImageLoader';
 import { AuthContext } from "../provider/AuthProvider";
 import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons';
 import {storeDataJSON, getDataJSON, removeData} from "../functions/AsyncFunctions";
-
-
+import * as firebase from "firebase";
+import "firebase/firestore";
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = (props) => {
   const [Bithdate, setBirthdate] = useState("");
   const [Address, setAdress] = useState("");
   const [Work, setWork] = useState("");
-  const [UserProfile, setUserProfile] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
+
+  const LoadData = async () => {
+    setIsLoading(true);
+    firebase
+        .firestore()
+        .collection('users')
+        .doc(props.currentUser.uid)
+        .onSnapshot((querySnapShot) => {
+            setIsLoading(false);
+            setBirthdate(querySnapShot.data().birthdate);
+            setAdress(querySnapShot.data().address);
+            setWork(querySnapShot.data().work);
+        })
+        .catch((error) => {
+            setIsLoading(false);
+            alert(error);
+        })
+  }
+    
+    useEffect(() =>{
+      LoadData();
+     },[]);
+
 
   
   return (
     <AuthContext.Consumer>
       {(auth) => (
         <View style={styles.viewStyle}>
-          <ScrollView>
           <HeaderHome
             DrawerFunction={() => {
-              props.navigation.toggleDrawer();
+              navigation.toggleDrawer();
             }}
           />
+          <ScrollView>
           <View style={{alignSelf:"center" , marginTop:30}}>
          <View>
          <View style={{ justifyContent: "center", alignSelf: "center", marginVertical: 40 }}>
@@ -42,7 +67,7 @@ const ProfileScreen = (props) => {
             onPress={() => console.log('hello')} />
         </View>
         </View>
-        <Text style={styles.txt1style}>{auth.CurrentUser.name}</Text>
+        <Text style={styles.txt1style}>{auth.CurrentUser.displayName}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop:30, alignSelf:"center"}}>
         <Button
           type="outline"
@@ -50,13 +75,26 @@ const ProfileScreen = (props) => {
           titleStyle ={styles.button2Style}
           icon={<AntDesign name="delete" size={28} color="red" />}
           onPress={
-          function(){
-            removeData('userprofile')
+            function(){
+                firebase
+                .firestore()
+                .collection('users')
+                .doc(props.currentUser.uid)
+                .delete()
+                .then(function() {
+                  auth.setIsLoggedIn(false);
+                  auth.setCurrentUser({});
+                  alert("Account successfully deleted!");
+                 })
+                 .catch(function(error) {
+                  console.error("Error removing document: ", error);
+                })
+            
           }
         }
         />
         </View>
-          <Card>
+          <Card  >
           <Text style={{fontSize:20, alignSelf:"center", fontWeight:"800"}}> Edit Profile</Text>
           <Card.Divider/>
             <Input leftIcon={<FontAwesome name="calendar" size={24} color="black" />}
@@ -73,17 +111,46 @@ const ProfileScreen = (props) => {
             }}
             />
              <Input leftIcon={<Entypo name="suitcase" size={24} color="black" />}
-            placeholder="Works At"
+            placeholder="Work"
             onChangeText ={function(currentInput){
                 setWork(currentInput);
             }}
             />
+            <Button
+          type="outline"
+          title="Confirm"
+          onPress={
+          function(){
+            firebase
+            .firestore()
+            .collection('users')
+            .doc(auth.CurrentUser.uid)
+            .set(
+                {  
+                  birthdate  : Bithdate,
+                  address : Address,
+                  work:  Work
+                  
+                },
+               { merge: true }
+            )
+            .then(() => {
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                alert(error);
+            })
+            
+          }
+        }
+        />
             
            
-            <View style={{marginTop:10}} >
+            <View style={{marginTop:10, height:200 }} >
              <Text style={styles.txt2style}>Born On  :      {Bithdate}  </Text>
               <Text style={styles.txt2style}>Address :       {Address} </Text>
-              <Text style={styles.txt2style}>Works At:       {Work} </Text>
+              <Text style={styles.txt2style}>Work      :       {Work} </Text>
             </View>
           </Card>
           </ScrollView>
@@ -95,7 +162,8 @@ const ProfileScreen = (props) => {
 
 const styles = StyleSheet.create({
   viewStyle: {
-    backgroundColor: "white"
+    flex: 1,
+    backgroundColor:"#eae5ff"
   },
   
   imgStyle:{
@@ -124,7 +192,8 @@ const styles = StyleSheet.create({
   txt2style:{
     marginLeft:10,
     fontSize:16,
-    fontWeight:"100"
+    fontWeight:"100",
+    padding:10
   },
   button2Style:{
     color: "red"
