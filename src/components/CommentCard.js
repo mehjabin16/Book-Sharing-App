@@ -29,11 +29,11 @@ const CommentCard = (props) => {
 };
 const styles = StyleSheet.create({
   buttonStyle:{
-      backgroundColor: "#873FB2"
+      backgroundColor: "#98A1DF"
       
   },
   button2Style:{
-      color: "#873FB2"
+      color: "#98A1DF"
       
   },
   iconStyle:{

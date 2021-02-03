@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import PostScreen from "./src/screens/PostScreen.js";
-import NotificationScreen from "./src/screens/NotificationScreen.js";
+import MybooksScreen from "./src/screens/MyBooks.js";
 import NotificationStackScreen from "./src/navigation/NotificationStack.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
@@ -12,13 +12,12 @@ import {AuthContext, AuthProvider} from "./src/provider/AuthProvider";
 import * as firebase from 'firebase';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAB_r6Xq_8HOnKTyRK-DSk3UNEjx7m2pws",
-  authDomain: "myblog-84d6d.firebaseapp.com",
-  databaseURL: "https://myblog-84d6d-default-rtdb.firebaseio.com",
-  projectId: "myblog-84d6d",
-  storageBucket: "myblog-84d6d.appspot.com",
-  messagingSenderId: "60212282971",
-  appId: "1:60212282971:web:7565e0b05b5f3569a4e17e"
+    apiKey: "AIzaSyAo0PNy-Jbx5z_5pM-KH7FyThLYZVZF5Tw",
+    authDomain: "booksharingapp-e7155.firebaseapp.com",
+    projectId: "booksharingapp-e7155",
+    storageBucket: "booksharingapp-e7155.appspot.com",
+    messagingSenderId: "63457459925",
+    appId: "1:63457459925:web:8846360ea699d0e9202c5c"
 };
 // Initialize Firebase
 if(!firebase.apps.length){
@@ -37,6 +36,8 @@ const AppDrawerScreen =() =>{
       //component={ProfileScreen}
       //screenOptions={({navigation})}
       children={()=><ProfileScreen currentUser={auth.CurrentUser} />} />
+      <AppDrawer.Screen name= "MyBooks" component={MybooksScreen} />
+
     </AppDrawer.Navigator>
     )}
      </AuthContext.Consumer>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "myBlogApp",
-    "slug": "myBlogApp",
+    "name": "BookSharingApp",
+    "slug": "BookSharingApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

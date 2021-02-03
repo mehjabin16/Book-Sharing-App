@@ -1,8 +1,9 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
+import { Entypo, AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "./../screens/NotificationScreen";
+import InboxScreen from "./../screens/InboxScreen";
 import { AuthContext } from "../provider/AuthProvider";
 
 
@@ -14,7 +15,7 @@ const HomeTabScreen = () => {
     <AuthContext.Consumer>
         {(auth) => (
     <HomeTab.Navigator initialRouteName="Home" activeColor="white"
-    barStyle={{ backgroundColor: '#873FB2' }}>
+    barStyle={{ backgroundColor: '#98A1DF' }}>
       <HomeTab.Screen 
         name="Home"
         component={HomeScreen}
@@ -45,6 +46,20 @@ const HomeTabScreen = () => {
                 color="white"
               />
             ),
+        }}
+      />
+      <HomeTab.Screen 
+        name="Inbox"
+        component={InboxScreen}
+        options={{
+          tabBarLabel: "Inbox",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <MaterialIcons name="chat-bubble" size={26} color="white" />
+            ) : (
+              <MaterialIcons name="chat-bubble-outline" size={22} color="white" />
+            ),
+          
         }}
       />
     </HomeTab.Navigator> 

@@ -129,7 +129,7 @@ const loadNotifications = async () => {
           title= { likeButton}
           type="outline"
           titleStyle = {styles.button2Style}
-          icon={<AntDesign name={Icon} size={24} color="#873FB2" />}
+          icon={<AntDesign name={Icon} size={24} color="#98A1DF" />}
           onPress={ function()  {
             //let likes = LikeCount+1;  
             //console.log(LikeCount);
@@ -213,11 +213,11 @@ const loadNotifications = async () => {
 }
 const styles = StyleSheet.create({
   buttonStyle:{
-      backgroundColor: "#873FB2"
+      backgroundColor: "#98A1DF"
       
   },
   button2Style:{
-      color: "#873FB2"
+      color: "#98A1DF"
       
   },
   iconStyle:{

@@ -15,7 +15,7 @@ return(
     <AuthContext.Consumer>
     {(auth)=>(
     <View style={styles.viewStyle}>
-        <Image source={require('./../../assets/undraw_blogging_vpvv.png')}
+        <Image source={require('./../../assets/undraw_book_lover_mkck.png')}
          resizeMode="center"
          style={styles.imgStyle}>
         </Image>

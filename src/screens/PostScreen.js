@@ -122,13 +122,13 @@ const loadNotifications = async () => {
                title= { likeButton}
                type="outline"
                titleStyle = {styles.button2Style}
-               icon={<AntDesign name={"like1"} size={24} color="#873FB2" />}
+               icon={<AntDesign name={"like1"} size={24} color="#98A1DF" />}
             />
             <Button
                title= { commentButton}
                type="outline"
                titleStyle = {styles.button2Style}
-               icon={<FontAwesome name={"comments"} size={24} color="#873FB2" />}
+               icon={<FontAwesome name={"comments"} size={24} color="#98A1DF" />}
           />
             </View>            
           </Card>     
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
 
 },
 button2Style:{
-  color: "#4169E1",
+  color: "#98A1DF",
   fontSize:16,
   fontWeight:"100",
 }
