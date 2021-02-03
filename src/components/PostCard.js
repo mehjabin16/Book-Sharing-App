@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Card, Button, Text, Avatar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
@@ -76,18 +76,29 @@ const loadNotifications = async () => {
     {(auth) => (
     <TouchableOpacity onPress={
       function(){
+        
         if (auth.CurrentUser.uid==props.authorID){
-          firebase
-          .firestore()
-          .collection('posts')
-          .doc(props.postID)
-          .delete()
-          .then(function() {
-            alert("Document successfully deleted!");
-           })
-           .catch(function(error) {
-            console.error("Error removing document: ", error);
-          })
+          Alert.alert(
+            'Delete Post',
+            'Are you sure to delete this post?',
+            [
+              {text: 'NO', onPress: () => console.warn('NO Pressed'), style: 'cancel'},
+              {text: 'YES', onPress: function(){
+                firebase
+                  .firestore()
+                  .collection('posts')
+                  .doc(props.postID)
+                  .delete()
+                  .then(function() {
+                   alert("Document successfully deleted!");
+                  })
+                  .catch(function(error) {
+                  console.error("Error removing document: ", error);
+                  })
+              } },
+            ]
+          );
+          
       }
     }
   }

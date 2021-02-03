@@ -68,6 +68,7 @@ return(
         leftIcon={<Entypo name="pencil" size={24} color="black" />}
         onChangeText ={function(val){
           setNewPost(val);
+          
       }}
      
       />
@@ -88,6 +89,7 @@ return(
               comments: [],
             })
             .then(function (doc) {
+              //setNewPost(" ");
               alert("Post created with id: " + doc.id );
               setLoading(false);
             })

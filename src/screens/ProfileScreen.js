@@ -82,9 +82,10 @@ const ProfileScreen = (props) => {
                 .doc(props.currentUser.uid)
                 .delete()
                 .then(function() {
+                  alert("Account successfully deleted!");
                   auth.setIsLoggedIn(false);
                   auth.setCurrentUser({});
-                  alert("Account successfully deleted!");
+                  
                  })
                  .catch(function(error) {
                   console.error("Error removing document: ", error);
