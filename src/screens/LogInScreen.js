@@ -19,9 +19,7 @@ return(
          resizeMode="center"
          style={styles.imgStyle}>
         </Image>
-        <Text style={styles.titleStyle}>
-            Welcome Back!
-        </Text>
+        
         <Card>
         
             <Card.Divider/>
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
 
     },
     buttonStyle:{
-        backgroundColor: "#5B2C92"
+        backgroundColor: "#6568c7"
         
     },
     button2Style:{

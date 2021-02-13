@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { Text, Card, Icon, Button, Input } from "react-native-elements";
+import { Text, Card, Icon, Button, Input, Header } from "react-native-elements";
 import HeaderHome from "./../components/HeaderHome";
 import ImageUpload from '../components/ImageLoader';
 import { AuthContext } from "../provider/AuthProvider";
@@ -50,6 +50,16 @@ const ProfileScreen = (props) => {
               navigation.toggleDrawer();
             }}
           />
+          <Header
+                statusBarProps={{ barStyle: 'light-content' }}
+                barStyle="light-content" // or directly
+                centerComponent={{ text: 'Profile', style: { color: '#fff' } }}
+                containerStyle={{
+                backgroundColor: '#595373',
+                justifyContent: 'center',
+                height:60, paddingBottom:20
+                  }}
+            />
           <ScrollView>
           <View style={{alignSelf:"center" , marginTop:30}}>
          <View>

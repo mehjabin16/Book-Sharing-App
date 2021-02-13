@@ -3,7 +3,8 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { Entypo, AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "./../screens/NotificationScreen";
-import InboxScreen from "./../screens/InboxScreen";
+import MapScreen from "./../screens/MapScreen";
+import Incoming from "./../screens/IncomingRequestScreen"
 import { AuthContext } from "../provider/AuthProvider";
 
 
@@ -49,10 +50,23 @@ const HomeTabScreen = () => {
         }}
       />
       <HomeTab.Screen 
-        name="Inbox"
-        component={InboxScreen}
+        name="Requests"
+        component={Incoming}
         options={{
-          tabBarLabel: "Inbox",
+          tabBarLabel: "Request",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <AntDesign name="circledown" size={26} color="white" />
+            ) : (
+              <AntDesign name="circledowno" size={22} color="white" />
+            ),
+        }}
+      />
+      <HomeTab.Screen 
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarLabel: "Map",
           tabBarIcon: ({ focused }) =>
             focused ? (
               <MaterialIcons name="chat-bubble" size={26} color="white" />

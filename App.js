@@ -2,8 +2,8 @@ import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import PostScreen from "./src/screens/PostScreen.js";
-import MybooksScreen from "./src/screens/MyBooks.js";
+import MyRequestsScreen from "./src/screens/MyRequestsScreens.js";
+import AddbookScreen from "./src/screens/MyBooks.js";
 import NotificationStackScreen from "./src/navigation/NotificationStack.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
@@ -36,8 +36,10 @@ const AppDrawerScreen =() =>{
       //component={ProfileScreen}
       //screenOptions={({navigation})}
       children={()=><ProfileScreen currentUser={auth.CurrentUser} />} />
-      <AppDrawer.Screen name= "MyBooks" component={MybooksScreen} />
-
+      <AppDrawer.Screen name= "Borrowed"  
+      children={()=><MyRequestsScreen currentUser={auth.CurrentUser} />} />
+      <AppDrawer.Screen name= "MyBooks"  
+      children={()=><AddbookScreen currentUser={auth.CurrentUser} />} />
     </AppDrawer.Navigator>
     )}
      </AuthContext.Consumer>

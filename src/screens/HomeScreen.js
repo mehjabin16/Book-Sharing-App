@@ -1,29 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {  View, StyleSheet, FlatList,  ActivityIndicator } from "react-native";
-import { Card, Button, Text, SearchBar, Input } from "react-native-elements";
+import { Card, Button, Text, SearchBar, Input , Image} from "react-native-elements";
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 import {AuthContext} from "../provider/AuthProvider";
-import PostCard from "./../components/PostCard";
+import BookCard from "./../components/BookCard";
 import HeaderHome from "../components/HeaderHome";
-import PostScreen from "./PostScreen";
-import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
 import * as firebase from "firebase";
 import "firebase/firestore";
 
 
 const HomeScreen = (props) => {
   
-  const [posts, setPosts] = useState("");
-  const [curDate, setCurDate] = useState("");
+  const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newpost, setNewPost] = useState("");
+  const [search, setSearch] = useState("");
 
-  const loadPosts = async () => {
+  const loadBooks = async () => {
     setLoading(true);
     firebase
       .firestore()
-      .collection("posts")
-      .orderBy("created_at", "asc")
+      .collection("Books")
       .onSnapshot((querySnapshot) => {
         let temp_posts = [];
         querySnapshot.forEach((doc) => {
@@ -32,7 +28,8 @@ const HomeScreen = (props) => {
             data: doc.data(),
           });
         });
-        setPosts(temp_posts);
+        setBooks(temp_posts);
+        console.log(books)
         setLoading(false);
       })
       .catch((error) => {
@@ -42,12 +39,8 @@ const HomeScreen = (props) => {
   };
 
   useEffect(() => {
-    var date= new Date().getDate();
-    var month= new Date().getMonth()+1;
-    var year= new Date().getFullYear();
-    setCurDate(date+'/'+month+'/'+year);
 
-    loadPosts();
+    loadBooks();
   }, []);
  
   
@@ -61,15 +54,26 @@ return(
         props.navigation.toggleDrawer();
       }}
     />
+    <View style={styles.searchStyle}>
      <SearchBar
         placeholder="Type Here..."
-       
+        onChangeText = {setSearch}
+        value={search}
+        lightTheme
       />
-      
-    <ActivityIndicator size="large" color="blue" animating={loading} />
-           
-    
-
+      </View>
+    <ActivityIndicator size="large" color="blue" animating={loading} /> 
+    <FlatList
+      data ={books}
+      renderItem ={ function({item}){
+        return(
+          <BookCard
+          title={item.data.title}
+          author= {item.data.author}
+          />
+      )}}
+      /> 
+       
   </View>
 )}
     </AuthContext.Consumer>
@@ -93,6 +97,14 @@ const styles = StyleSheet.create({
         color: "white"
         
     },
+    searchStyle:{
+      padding:30
+    },
+    imgStyle: {
+      width: 100,
+      height: 150,
+      alignSelf:'flex-end'
+  },
 
 });
 

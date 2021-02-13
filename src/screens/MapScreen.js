@@ -1,21 +1,17 @@
 import React, {useState, useEffect} from "react";
-import { View, StyleSheet, Button,FlatList } from "react-native";
+import { View, StyleSheet, Button,FlatList, Alert } from "react-native";
+import { SafeAreaView } from "react-navigation";
 import { Text, Card, Avatar } from "react-native-elements";
-import HeaderHome from "./../components/HeaderHome";
-import NotificationCard from "./../components/NotificationCard";
+import HeaderHome from "../components/HeaderHome";
+import NotificationCard from "../components/NotificationCard";
 import { AuthContext } from "../provider/AuthProvider";
-import { storeDataJSON, getDataJSON , removeData } from "../functions/AsyncFunctions";
+import Map from "../components/Map";
 import * as firebase from "firebase";
 import "firebase/firestore";
 
 
-const InboxScreen = (props) => {
-  //console.log(props.currentUser.uid);
-  const [isLoading, setIsLoading] = useState(false);
-  const [NotificationList, setNotificationList] = useState([]);
+const MapScreen = (props) => {
   
- 
-
   return (
     <AuthContext.Consumer>
    {(auth)=>(
@@ -24,11 +20,12 @@ const InboxScreen = (props) => {
       DrawerFunction={() => {
         props.navigation.toggleDrawer();
       }}
-    />
-    
-    
-
+    /> 
+     <SafeAreaView>
+        <Map />
+    </SafeAreaView>
   </View>
+ 
 )}
     </AuthContext.Consumer>
 );
@@ -51,4 +48,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default InboxScreen;
+export default MapScreen;

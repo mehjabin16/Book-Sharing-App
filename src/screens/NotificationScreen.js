@@ -31,9 +31,6 @@ const NotificationScreen = (props) => {
             alert(error);
         })
   }
-  
-  
-  
   useEffect(() =>{
    
     loadNotificationData();
@@ -50,7 +47,6 @@ const NotificationScreen = (props) => {
     />
     
     <FlatList
-
       data ={NotificationList}
       renderItem ={ function({item}){
         return(
