@@ -56,7 +56,7 @@ return(
     />
     <View style={styles.searchStyle}>
      <SearchBar
-        placeholder="Type Here..."
+        placeholder="Search Books"
         onChangeText = {setSearch}
         value={search}
         lightTheme
@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
         
     },
     searchStyle:{
-      padding:30
+      padding:30,
+  
     },
     imgStyle: {
       width: 100,

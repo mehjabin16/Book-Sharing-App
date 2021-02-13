@@ -3,7 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyRequestsScreen from "./src/screens/MyRequestsScreens.js";
-import AddbookScreen from "./src/screens/MyBooks.js";
+import MybookScreen from "./src/screens/MyBooks.js";
+import AddBookScreen from "./src/screens/AddBookScreen.js";
 import NotificationStackScreen from "./src/navigation/NotificationStack.js";
 import SignUpScreen from "./src/screens/SignUpScreen.js";
 import LogInScreen from "./src/screens/LogInScreen.js";
@@ -38,8 +39,9 @@ const AppDrawerScreen =() =>{
       children={()=><ProfileScreen currentUser={auth.CurrentUser} />} />
       <AppDrawer.Screen name= "Borrowed"  
       children={()=><MyRequestsScreen currentUser={auth.CurrentUser} />} />
-      <AppDrawer.Screen name= "MyBooks"  
-      children={()=><AddbookScreen currentUser={auth.CurrentUser} />} />
+      <AppDrawer.Screen name= "My Books"  
+      children={()=><MybookScreen currentUser={auth.CurrentUser} />} />
+      <AppDrawer.Screen name= "Add New Book" component={AddBookScreen} />
     </AppDrawer.Navigator>
     )}
      </AuthContext.Consumer>

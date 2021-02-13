@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Card, Button, Text, Avatar, Image, Icon } from "react-native-elements";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import { Rating } from 'react-native-elements';
 import {
@@ -81,13 +81,13 @@ const [ratingCount, SetratingCount]= useState(0)
                title= 'Accept'
                type="outline"
                titleStyle = {styles.button2Style}
-               icon={<AntDesign name={"like1"} size={24} color="#98A1DF" />}
+               icon={<AntDesign name="checkcircle" size={24} color="green" />}
             />
             <Button
                title= 'Reject'
                type="outline"
                titleStyle = {styles.button2Style}
-               icon={<FontAwesome name={"comments"} size={24} color="#98A1DF" />}
+               icon={<Entypo name="circle-with-cross" size={24} color="red" />}
           />
             </View>            
           
